@@ -12,7 +12,7 @@ import {
 
 const useStyles = makeStyles();
 
-function Header() {
+export default function Header() {
   const classes = useStyles();
   return (
     <AppBar position="sticky">
@@ -26,5 +26,3 @@ function Header() {
     </AppBar>
   );
 }
-
-export default Header;

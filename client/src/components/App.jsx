@@ -7,6 +7,7 @@ import { Add } from "@material-ui/icons";
 
 import Meal from "./Meal";
 import Header from "./Header";
+import Footer from "./Footer";
 
 const useStyles = makeStyles({
   fabNew: {
@@ -55,6 +56,7 @@ export default function App() {
       <Fab color="primary" aria-label="Add" className={classes.fabNew}>
         <Add />
       </Fab>
+      <Footer />
     </div>
   );
 }
