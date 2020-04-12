@@ -15,12 +15,16 @@
 # gem 'pg'
 #
 development:
-  adapter: postgresql
+  adapter: postgresql 
   encoding: unicode
-  database: rails_project_development
+  url: <%= ENV['DATABASE_URL'] %>
+  host: <%= ENV["DATABASE_HOST"] %>                            # HOST 
+  port: <%= ENV['DATABASE_PORT'] %>                            # Port  
+  database: <%= ENV['DATABASE_USER'] %>               # Database Name  
+  username: <%= ENV['DATABASE_USER'] %>                   # User Name  
+  password: <%= ENV['DATABASE_PASS'] %>                  # Password 
   pool: 5
-  username:
-  password:
+
   timeout: 5000
  
   # Connect on a TCP socket. Omitted by default since the client uses a
