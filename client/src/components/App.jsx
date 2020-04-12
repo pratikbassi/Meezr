@@ -8,13 +8,18 @@ import { Add } from "@material-ui/icons";
 import Meal from "./Meal";
 import Header from "./Header";
 import Footer from "./Footer";
+import Filter from "./Filter";
 
 const useStyles = makeStyles({
   fabNew: {
     float: "right",
-    position: "absolute",
+    position: "fixed",
     bottom: "3em",
     right: "3em",
+  },
+  browse: {
+    display: "grid",
+    "grid-template-columns": "1fr 3fr 1fr",
   },
 });
 
@@ -42,8 +47,7 @@ const testData = [
 ];
 
 const meals = testData.map((meal) => {
-  const { image, title, description } = meal;
-  return <Meal image={image} title={title} description={description} />;
+  return <Meal props={meal} />;
 });
 
 export default function App() {
@@ -51,8 +55,10 @@ export default function App() {
   return (
     <div className="App">
       <Header />
-      This is the App Div
-      <Container>{meals}</Container>
+      <div className={classes.browse}>
+        <Filter />
+        <Container>{meals}</Container>
+      </div>
       <Fab color="primary" aria-label="Add" className={classes.fabNew}>
         <Add />
       </Fab>
