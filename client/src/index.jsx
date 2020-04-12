@@ -3,12 +3,14 @@ import ReactDOM from "react-dom";
 import CssBaseline from "@material-ui/core/CssBaseline";
 // import "./index.scss";
 import App from "./components/App";
+import AppOld from "./components/AppOld";
 import * as serviceWorker from "./serviceWorker";
 
 ReactDOM.render(
   <React.StrictMode>
     <CssBaseline />
     <App />
+    <AppOld />
   </React.StrictMode>,
   document.getElementById("root")
 );
