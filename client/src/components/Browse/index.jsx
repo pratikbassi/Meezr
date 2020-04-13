@@ -5,9 +5,9 @@ import { Fab, Container } from "@material-ui/core";
 import { Add } from "@material-ui/icons";
 // import "./App.scss";
 
-import Meal from "./Meal";
-import Header from "./Header";
-import Footer from "./Footer";
+import Meal from "../Meal";
+import Header from "../Header";
+import Footer from "../Footer";
 import Filter from "./Filter";
 
 const useStyles = makeStyles({
