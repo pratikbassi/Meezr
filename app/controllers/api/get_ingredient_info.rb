@@ -25,6 +25,8 @@ class IngredientsInfo
       # req.body = {query: 'butter'}.to_json # would be used for like parseIngredients API i think
     end
 
+    return nil if response.status != 200
+  
     data = JSON.parse(response.body)
     puts JSON.pretty_generate(data)
   end
