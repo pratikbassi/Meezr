@@ -1,0 +1,2 @@
+class MealPhoto < ApplicationRecord
+end
