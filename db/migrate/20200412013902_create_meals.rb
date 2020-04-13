@@ -4,6 +4,7 @@ class CreateMeals < ActiveRecord::Migration[5.2]
       t.references :user, foreign_key: true
       t.boolean :is_public, :default =>  true
       t.boolean :is_deleted, :default =>  false
+      t.timestamps
     end
   end
 end
