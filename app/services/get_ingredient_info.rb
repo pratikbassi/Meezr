@@ -28,7 +28,7 @@ class IngredientsInfo
     return nil if response.status != 200
   
     data = JSON.parse(response.body)
-    # puts JSON.pretty_generate(data)
+    JSON.pretty_generate(data)
   end
 end
 
