@@ -10,7 +10,7 @@ export default (
     <Switch>
       <Route path="/" exact component={Browse} />
       <Route path="/profile" exact component={Profile} />
-      <Route path="/meal" exact component={SingleMeal} />
+      <Route path="/meal/:id" exact component={SingleMeal} />
     </Switch>
   </Router>
 );
