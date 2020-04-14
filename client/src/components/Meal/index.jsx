@@ -1,12 +1,14 @@
-import React, { useState } from "react";
-import { Container, Typography } from "@material-ui/core";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { Container, Typography, IconButton, Chip } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import { Favorite, FavoriteBorder } from "@material-ui/icons";
 // import "./styles.scss";
 
 const useStyles = makeStyles({
   meal: {
     display: "grid",
-    "grid-template-areas": '"image content favorite" "image content favorite"',
+    "grid-template-areas": '"image content favorite" "image content empty"',
     "grid-template-columns": "2fr 7fr 1fr",
     "grid-template-rows": "4em minmax(20em, 30vh)",
     "background-color": "red",
@@ -27,16 +29,73 @@ const useStyles = makeStyles({
 });
 
 export default function Meal(props) {
-  console.log(props.props);
+  const [state, setState] = useState(props.props);
+
+  console.log("Meal state: ", state);
+  console.log("Meal props: ", props.props);
   const classes = useStyles();
-  const { image, title, description } = props.props;
+  const {
+    id,
+    image,
+    title,
+    description,
+    user,
+    ingredients,
+    tags,
+    calories,
+    score,
+    prepTime,
+    cost,
+    is_favorited,
+  } = state;
+
+  useEffect(() => {
+    setState(props.props);
+  }, []);
+
+  const favItem = () => {
+    // const newFavState = is_favorited
+    setState((prev) => {
+      return { ...prev, is_favorited: is_favorited ? false : true };
+    });
+  };
+
   return (
     <article className={classes.meal}>
       <img src={image} className={classes.image}></img>
       <section className={classes.content}>
-        <Typography variant="h3">{title}</Typography>
-        <Typography variant="p">{description}</Typography>
+        <Typography variant="h3">
+          <Link to={"/meal/" + id} className="btn custom-button">
+            {title}
+          </Link>
+        </Typography>
+        <Typography variant="subtitle1">Submitted By: {user}</Typography>
+        <Typography variant="body2" paragraph={true}>
+          <span>{description}</span>
+          <br />
+          <span>Calories{calories}</span>
+          <br />
+          <span>Score: {score}</span>
+          <br />
+          <span>{description}</span>
+          <br />
+          <span>Prep Time: {prepTime}</span>
+          <br />
+          <span>Estimated Cost: {cost}</span>
+          <br />
+
+          {tags.map((tag) => (
+            <Chip label={tag} />
+          ))}
+        </Typography>
       </section>
+      <IconButton
+        aria-label="favorite"
+        className={classes.favorite}
+        // onClick={() => favItem()}
+      >
+        {is_favorited ? <Favorite /> : <FavoriteBorder />}
+      </IconButton>
     </article>
   );
 }
