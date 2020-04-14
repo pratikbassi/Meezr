@@ -28,9 +28,9 @@ class IngredientsInfo
     return nil if response.status != 200
   
     data = JSON.parse(response.body)
-    puts JSON.pretty_generate(data)
+    # puts JSON.pretty_generate(data)
   end
 end
 
-pineapple_info = IngredientsInfo.new('9266', 100)
-pineapple_info.get_ingredient_info
+# pineapple_info = IngredientsInfo.new('9266', 100)
+# pineapple_info.get_ingredient_info
