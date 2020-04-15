@@ -6,9 +6,11 @@ import {} from "@material-ui/icons";
 
 import useVisualMode from "../../hooks/useVisualMode";
 
+import Header from "../Header";
+import Footer from "../Footer";
 import Page1 from "./Page1";
 
-const useStyles = makeStyles();
+const useStyles = makeStyles({});
 
 export default function NewMeal() {
   const classes = useStyles();
@@ -21,18 +23,24 @@ export default function NewMeal() {
   const { mode, transition, back } = useVisualMode(PAGE1);
   // super WIP
   return (
-    <article>
-      <Typography variant="h1">Create a New Meal</Typography>
-      {mode === PAGE1 && <Page1 onAdd={() => transition(CREATE)} />}
-      {mode === PAGE2 && <Page2 message={"Saving"} />}
-      {mode === PAGE3 && <Page3 message={"Deleting"} />}
-      {mode === PAGE4 && (
+    <>
+      <Header />
+      <Container>
+        <Typography variant="h2" className={classes.root}>
+          Create a New Meal
+        </Typography>
+        {mode === PAGE1 && <Page1 />}
+        {/* {mode === PAGE2 && <Page2 />}
+      {mode === PAGE3 && <Page3 />} */}
+        {/* {mode === PAGE4 && (
         <Page4
           interviewers={interviewers}
           onSave={save}
           onCancel={() => back()}
-        />
-      )}
-    </article>
+        /> */}
+        )}
+      </Container>
+      <Footer />
+    </>
   );
 }
