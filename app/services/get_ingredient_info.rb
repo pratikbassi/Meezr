@@ -33,4 +33,4 @@ class IngredientsInfo
 end
 
 pineapple_info = IngredientsInfo.new('9266', 100)
-pineapple_info.get_ingredient_info
+pp pineapple_info.get_ingredient_info

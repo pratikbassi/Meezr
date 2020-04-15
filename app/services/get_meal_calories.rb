@@ -25,9 +25,10 @@ class GetMealCalories
     return nil if response.status != 200
   
     data = JSON.parse(response.body)
-    
+    data["calories"]
   end
 end
 
 meal_cals = GetMealCalories.new('1003464')
-pp meal_cals.get_meal_calories.inspect
+pp meal_cals.get_meal_calories
+    
