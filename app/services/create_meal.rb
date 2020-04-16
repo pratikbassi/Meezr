@@ -10,7 +10,7 @@ class CreateMeal
 
   def initialize(ingredients)
     @ingredients = ingredients
-    @number_results = 1
+    @number_results = 5
     @ranking = 1
     @ignore_pantry = false
     @data = create_meal()
@@ -35,18 +35,12 @@ class CreateMeal
     JSON.parse(response.body)
     # JSON.pretty_generate(data)
   end
-
-  def get_calories
-    puts "hello"
-    pp @data
-  end
-
 end
 
-supper = CreateMeal.new('apples,flour,sugar')
+# supper = CreateMeal.new('apples,flour,sugar')
 # no_cal = supper.create_meal
 # puts no_cal.get_calories
-supper.get_calories
+# supper.get_calories
 
 
 
