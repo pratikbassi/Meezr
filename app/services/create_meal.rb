@@ -5,14 +5,15 @@ Dotenv.load
 
 # Uses a string of ingredients to create a meal.
 class CreateMeal
-
-  attr_accessor :ingredients, :number_results, :ranking, :ignore_pantry
+  
+  attr_accessor :ingredients, :number_results, :ranking, :ignore_pantry, :data
 
   def initialize(ingredients)
-    self.ingredients = ingredients
-    self.number_results = 1
-    self.ranking = 2
-    self.ignore_pantry = false
+    @ingredients = ingredients
+    @number_results = 1
+    @ranking = 1
+    @ignore_pantry = false
+    @data = create_meal()
   end
 
   def create_meal
@@ -22,19 +23,31 @@ class CreateMeal
     )
 
     response = connection.get('findByIngredients') do |request|
-      request.params['ingredients'] = self.ingredients
-      request.params['number'] = self.number_results
-      request.params['ranking'] = self.ranking
-      request.params['ignore_pantry'] = self.ignore_pantry
+      request.params['ingredients'] = @ingredients
+      request.params['number'] = @number_results
+      request.params['ranking'] = @ranking
+      request.params['ignore_pantry'] = @ignore_pantry
       # req.body = {query: 'butter'}.to_json # would be used for like parseIngredients API i think
     end
 
     return nil if response.status != 200
   
-    data = JSON.parse(response.body)
-    JSON.pretty_generate(data)
+    JSON.parse(response.body)
+    # JSON.pretty_generate(data)
   end
+
+  def get_calories
+    puts "hello"
+    pp @data
+  end
+
 end
 
 supper = CreateMeal.new('apples,flour,sugar')
-puts supper.create_meal
+# no_cal = supper.create_meal
+# puts no_cal.get_calories
+supper.get_calories
+
+
+
+

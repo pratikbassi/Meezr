@@ -11,7 +11,7 @@ import {
 } from "@material-ui/core";
 // import AppBar from "@material-ui/core/AppBar";
 
-const useStyles = makeStyles();
+const useStyles = makeStyles({});
 
 export default function Header() {
   const classes = useStyles();
