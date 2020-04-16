@@ -92,7 +92,7 @@ export default function Meal(props) {
       <IconButton
         aria-label="favorite"
         className={classes.favorite}
-        // onClick={() => favItem()}
+        onClick={() => favItem()}
       >
         {is_favorited ? <Favorite /> : <FavoriteBorder />}
       </IconButton>

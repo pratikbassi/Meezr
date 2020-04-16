@@ -8,7 +8,7 @@ import Meal from "./Meal";
 import Header from "./Header";
 import Footer from "./Footer";
 
-const useStyles = makeStyles();
+const useStyles = makeStyles({});
 
 export default function SingleMeal() {
   const classes = useStyles();
