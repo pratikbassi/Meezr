@@ -11,13 +11,13 @@ import {
   TextField,
   Button,
 } from "@material-ui/core";
-import {} from "@material-ui/icons";
+import { Add, Remove } from "@material-ui/icons";
 
 const useStyles = makeStyles({});
 
 export default function Page2(props) {
   const classes = useStyles();
-  const { state, onAdd, onChange, onQuantityAdd, onQuantityDecrease } = props;
+  const { state, onAdd, onQuantityAdd, onQuantityDecrease } = props;
 
   const createAutocompleteEntries = () => {
     let autocompletedata = [
@@ -76,9 +76,13 @@ export default function Page2(props) {
         if (ingredients[ingredient] > 0) {
           output.push(
             <div>
-              <Button onClick={() => onQuantityDecrease(ingredient)}>-</Button>
+              <Button onClick={() => onQuantityDecrease(ingredient)}>
+                <Remove />
+              </Button>
               <span>{ingredients[ingredient]}</span>
-              <Button onClick={() => onQuantityAdd(ingredient)}>+</Button>
+              <Button onClick={() => onQuantityAdd(ingredient)}>
+                <Add />
+              </Button>
               <span>of {ingredient}</span>
             </div>
           );

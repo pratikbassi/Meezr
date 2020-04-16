@@ -23,23 +23,18 @@ export default function NewMeal() {
       butter: 1,
       butterscotch: 3,
     },
-    title: "",
-    description: "",
+    title: "Default Title",
+    description: "Default Description",
     image_url: "https://i.redd.it/ewwlx46f7es41.jpg",
   });
 
-  // const PAGE1 = "PAGE1";
-  // const PAGE2 = "PAGE2";
-  // const PAGE3 = "PAGE3";
-  // const PAGE4 = "PAGE4";
-  // const { mode, transition, back, historyVM } = useVisualMode(stepNum);
-
   const [currentStep, setCurrentStep] = useState(1);
-  console.log("currentStep", currentStep);
+  // console.log("currentStep", currentStep);
 
   const _next = () => {
-    console.log("next clicked");
-    setCurrentStep((prev) => prev + 1);
+    if (currentStep <= 3) {
+      setCurrentStep((prev) => prev + 1);
+    }
   };
 
   const _back = () => {
@@ -50,12 +45,13 @@ export default function NewMeal() {
 
   const handleSubmit = () => {
     console.log("submit!");
+    console.log("state!", state);
   };
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    console.log("Input Change!");
-    console.log(event);
+    // console.log("Input Change!");
+    // console.log(event);
     const newValue = {
       [name]: value,
     };
@@ -75,9 +71,9 @@ export default function NewMeal() {
 
   const handleAdd = (event) => {
     const { name, value } = event.target;
-    console.log("Input Add!");
-    console.log(event);
-    console.log(state);
+    // console.log("Input Add!");
+    // console.log(event);
+    // console.log(state);
     setState((prev) => {
       return {
         ...prev,
@@ -90,11 +86,11 @@ export default function NewMeal() {
   };
 
   const handleQuantityAdd = (name) => {
-    console.log("Input Modify Add!");
-    console.log("name", name);
+    // console.log("Input Modify Add!");
+    // console.log("name", name);
 
     setState((prev) => {
-      console.log("prev", prev);
+      // console.log("prev", prev);
       return {
         ...prev,
         ingredients: {
@@ -106,11 +102,11 @@ export default function NewMeal() {
   };
 
   const handleQuantityDecrease = (name) => {
-    console.log("Input Modify Decrease!");
-    console.log("name", name);
+    // console.log("Input Modify Decrease!");
+    // console.log("name", name);
 
     setState((prev) => {
-      console.log("prev", prev);
+      // console.log("prev", prev);
       return {
         ...prev,
         ingredients: {
@@ -130,19 +126,20 @@ export default function NewMeal() {
         </Typography>
         <p>Step {currentStep} </p>
         <form onSubmit={handleSubmit}>
+          {/* Check and render appropiate view */}
           {currentStep === 1 && <Page1 state={state} onChange={handleChange} />}
           {currentStep === 2 && (
             <Page2
               state={state}
-              onChange={handleChange}
               onAdd={handleAdd}
               onQuantityAdd={handleQuantityAdd}
               onQuantityDecrease={handleQuantityDecrease}
             />
           )}
           {currentStep === 3 && <Page3 state={state} />}
-          {currentStep === 4 && <Page4 state={state} />}
+          {currentStep === 4 && <Page4 state={state} onChange={handleChange} />}
 
+          {/* Check and render appropiate buttons */}
           {currentStep === 1 && <Button onClick={_next}> Next </Button>}
           {currentStep > 1 && currentStep < 4 && (
             <>
