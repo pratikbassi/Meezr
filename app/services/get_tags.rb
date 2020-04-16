@@ -27,7 +27,7 @@ class GetTags
 
     return nil if response.status != 200
   
-    # pp data = JSON.parse(response.body)
+    data = JSON.parse(response.body)
     
     if(data["vegetarian"])
       tags_obj[:vegetarian] = "Vegetarian"
@@ -35,12 +35,12 @@ class GetTags
     if(data["vegan"])
       tags_obj[:vegan] = "Vegan"
     end
-    if (data["glutenFree"])
-      tags_obj[:glutenFree] = "Gluten Free"
-    end
-    if(data["dairyFree"])
-      tags_obj[:dairyFree] = "Dairy Free"
-    end
+    # if (data["glutenFree"])
+    #   tags_obj[:glutenFree] = "Gluten Free"
+    # end
+    # if(data["dairyFree"])
+    #   tags_obj[:dairyFree] = "Dairy Free"
+    # end
     if(data["whole30"])
       tags_obj[:whole30] = "Whole 30"
     end
@@ -48,11 +48,16 @@ class GetTags
       tags_obj[:ketogenic] = "Ketogenic"
     end
 
-    #object/hash contain all of the tags that returned true. 
+    #If not matches, meal is best suited for omnivore.
+    if(tags_obj.empty?)
+      tags_obj[:omnivore] = "Omnivore"
+    end
+
     tags_obj
+
   end
 end
 
-# tags = GetTags.new('1003464') #1003464, 716429
-# pp tags.get_tags
+tags = GetTags.new('82048') #1003464, 716429
+pp tags.get_tags
 
