@@ -628,7 +628,7 @@ puts("===Users complete===")
 for i in 1..100 do
   Ingredient.create(
     product: foods[rand(99)], 
-    nut_info: "calories: yes, protien: some, healthy: no"
+    nut_info: {"calories" => rand(200) }
     )
 end
 puts("===Ingredients complete===")
