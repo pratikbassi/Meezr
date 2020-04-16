@@ -1,10 +1,7 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import { Container, Typography, Button } from "@material-ui/core";
 import {} from "@material-ui/icons";
-
-import useVisualMode from "../../hooks/useVisualMode";
 
 import Header from "../Header";
 import Footer from "../Footer";
@@ -22,7 +19,10 @@ export default function NewMeal() {
     size: "Medium",
     type: "Breakfast",
     calorieGoal: 500,
-    ingredients: [],
+    ingredients: {
+      butter: 1,
+      butterscotch: 3,
+    },
     title: "",
     description: "",
     image_url: "https://i.redd.it/ewwlx46f7es41.jpg",
@@ -70,12 +70,57 @@ export default function NewMeal() {
       }
     }
     // console.log("newValue", newValue);
+    setState((prev) => ({ ...prev, ...newValue }));
+  };
+
+  const handleAdd = (event) => {
+    const { name, value } = event.target;
+    console.log("Input Add!");
+    console.log(event);
+    console.log(state);
     setState((prev) => {
-      return { ...prev, ...newValue };
+      return {
+        ...prev,
+        ingredients: {
+          ...prev[name],
+          [value]: 1,
+        },
+      };
     });
   };
 
-  // super WIP
+  const handleQuantityAdd = (name) => {
+    console.log("Input Modify Add!");
+    console.log("name", name);
+
+    setState((prev) => {
+      console.log("prev", prev);
+      return {
+        ...prev,
+        ingredients: {
+          ...prev.ingredients,
+          [name]: prev.ingredients[name] + 1,
+        },
+      };
+    });
+  };
+
+  const handleQuantityDecrease = (name) => {
+    console.log("Input Modify Decrease!");
+    console.log("name", name);
+
+    setState((prev) => {
+      console.log("prev", prev);
+      return {
+        ...prev,
+        ingredients: {
+          ...prev.ingredients,
+          [name]: prev.ingredients[name] - 1,
+        },
+      };
+    });
+  };
+
   return (
     <>
       <Header />
@@ -86,7 +131,15 @@ export default function NewMeal() {
         <p>Step {currentStep} </p>
         <form onSubmit={handleSubmit}>
           {currentStep === 1 && <Page1 state={state} onChange={handleChange} />}
-          {currentStep === 2 && <Page2 state={state} />}
+          {currentStep === 2 && (
+            <Page2
+              state={state}
+              onChange={handleChange}
+              onAdd={handleAdd}
+              onQuantityAdd={handleQuantityAdd}
+              onQuantityDecrease={handleQuantityDecrease}
+            />
+          )}
           {currentStep === 3 && <Page3 state={state} />}
           {currentStep === 4 && <Page4 state={state} />}
 
