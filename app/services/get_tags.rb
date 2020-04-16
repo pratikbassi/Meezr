@@ -35,12 +35,12 @@ class GetTags
     if(data["vegan"])
       tags_obj[:vegan] = "Vegan"
     end
-    # if (data["glutenFree"])
-    #   tags_obj[:glutenFree] = "Gluten Free"
-    # end
-    # if(data["dairyFree"])
-    #   tags_obj[:dairyFree] = "Dairy Free"
-    # end
+    if (data["glutenFree"])
+      tags_obj[:glutenFree] = "Gluten Free"
+    end
+    if(data["dairyFree"])
+      tags_obj[:dairyFree] = "Dairy Free"
+    end
     if(data["whole30"])
       tags_obj[:whole30] = "Whole 30"
     end
