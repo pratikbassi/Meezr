@@ -33,13 +33,12 @@ class CreateMeal
     return nil if response.status != 200
   
     JSON.parse(response.body)
-    # JSON.pretty_generate(data)
   end
 end
 
-# supper = CreateMeal.new('apples,flour,sugar')
-# no_cal = supper.create_meal
-# puts no_cal.get_calories
+supper = CreateMeal.new('apples,flour,sugar')
+no_cal = supper.create_meal
+pp no_cal
 # supper.get_calories
 
 
