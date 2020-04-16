@@ -5,8 +5,12 @@ Rails.application.routes.draw do
     
     get 'ingredient_finder/index', to: 'ingredient_finder#index'
     get '/data', to: 'tests#index'
+    get    'login'   => 'sessions#new'
+    post   'login'   => 'sessions#create'
+    delete 'logout'  => 'sessions#destroy'
     
     resources :dogs
+    resources :users
 
   end
 
