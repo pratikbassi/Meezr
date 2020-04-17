@@ -16,7 +16,9 @@ class GetMealCalories
     connection = Faraday.new(
       url: 'https://api.spoonacular.com/recipes/',
       params: {apiKey: ENV['API_KEY']},
-    )
+    )do |c|
+    c.use Faraday::Response::RaiseError
+  end
 
     response = connection.get(self.id+'/nutritionWidget.json') do |request|
       request.params['id'] = self.id
@@ -29,6 +31,6 @@ class GetMealCalories
   end
 end
 
-# meal_cals = GetMealCalories.new('1003464')
-# pp meal_cals.get_meal_calories
+meal_cals = GetMealCalories.new('1003464')
+pp meal_cals.get_meal_calories
     
