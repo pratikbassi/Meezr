@@ -18,13 +18,11 @@ class GetMealCalories
       params: {apiKey: ENV['API_KEY']},
     )do |c|
     c.use Faraday::Response::RaiseError
-  end
+    end
 
     response = connection.get(self.id+'/nutritionWidget.json') do |request|
       request.params['id'] = self.id
     end
-
-    return nil if response.status != 200
   
     data = JSON.parse(response.body)
     data["calories"]

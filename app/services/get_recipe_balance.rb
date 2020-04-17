@@ -18,19 +18,19 @@ class GetRecipeBalance
     connection = Faraday.new(
       url: 'https://api.spoonacular.com/recipes/',
       params: {apiKey: ENV['API_KEY']},
-    )
+    )do |c|
+    c.use Faraday::Response::RaiseError
+    end
 
     response = connection.get(self.id+'/information') do |request|
       request.params['id'] = self.id
       request.params['includeNutrition'] = self.includeNutrition
     end
 
-    return nil if response.status != 200
-  
     data = JSON.parse(response.body)
     data["nutrition"]["caloricBreakdown"]
   end
 end
 
-recipe_nutrition = GetRecipeBalance.new('716429')
-pp recipe_nutrition.get_recipe_information
+# recipe_nutrition = GetRecipeBalance.new('716429')
+# pp recipe_nutrition.get_recipe_information

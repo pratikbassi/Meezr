@@ -19,13 +19,13 @@ class GetTags
     connection = Faraday.new(
       url: 'https://api.spoonacular.com/recipes',
       params: {apiKey: ENV['API_KEY']},
-    )
+    )do |c|
+    c.use Faraday::Response::RaiseError
+    end
 
     response = connection.get(self.id+'/information') do |request|
       request.params['includeNutrition'] = self.include_nutrtion
     end
-
-    return nil if response.status != 200
   
     data = JSON.parse(response.body)
     
@@ -58,6 +58,6 @@ class GetTags
   end
 end
 
-# tags = GetTags.new('82048') #1003464, 716429
-# pp tags.get_tags
+tags = GetTags.new('82048') #1003464, 716429
+pp tags.get_tags
 

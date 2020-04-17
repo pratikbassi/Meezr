@@ -21,7 +21,9 @@ class PriceWidget
     connection = Faraday.new(
       url: 'https://api.spoonacular.com/recipes/',
       params: {apiKey: ENV['API_KEY']},
-    )
+    )do |c|
+    c.use Faraday::Response::RaiseError
+    end
 
     response = connection.get(self.id+'/ingredientWidget') do |request|
       request.params['id'] = self.id
@@ -36,5 +38,5 @@ class PriceWidget
   end
 end
 
-# meal_cals = PriceWidget.new('1082038')
-# meal_cals.get_nutrition_widget
+meal_cals = PriceWidget.new('1082038')
+meal_cals.get_nutrition_widget

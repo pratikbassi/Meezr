@@ -16,19 +16,19 @@ class GetMealCost
     connection = Faraday.new(
       url: 'https://api.spoonacular.com/recipes/',
       params: {apiKey: ENV['API_KEY']},
-    )
+    )do |c|
+    c.use Faraday::Response::RaiseError
+    end
 
     response = connection.get(self.id+'/priceBreakdownWidget.json') do |request|
       request.params['id'] = self.id
     end
-
-    return nil if response.status != 200
   
     data = JSON.parse(response.body)
     data["totalCost"]
   end
 end
 
-# meal_cost = GetMealCost.new('1003464')
-# pp meal_cost.get_meal_calories
+meal_cost = GetMealCost.new('1003464')
+pp meal_cost.get_meal_calories
     

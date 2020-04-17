@@ -25,17 +25,17 @@ class ParsedIngredientInfo
     connection = Faraday.new(
       url: 'https://api.spoonacular.com/recipes/',
       params: {apiKey: ENV['API_KEY']},
-    )
+    )do |c|
+    c.use Faraday::Response::RaiseError
+    end
 
     response = connection.post('parseIngredients') do |request|
       request.headers['Content-Type'] = 'application/x-www-form-urlencoded'
       request.body = URI.encode_www_form(data)
     end
-
-    return nil if response.status != 200
   
     data = JSON.parse(response.body)
-   
+
   end
 end
 

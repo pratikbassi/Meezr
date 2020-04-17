@@ -19,15 +19,15 @@ class NutritionWidget
     connection = Faraday.new(
       url: 'https://api.spoonacular.com/recipes/',
       params: {apiKey: ENV['API_KEY']},
-    )
+    )do |c|
+    c.use Faraday::Response::RaiseError
+    end
 
     response = connection.get(self.id+'/nutritionWidget') do |request|
       request.params['id'] = self.id
       request.params['defaultCss'] = self.defaultCss
     end
 
-    return nil if response.status != 200
-  
     data = response.body
     data.delete! '\\'
     data
