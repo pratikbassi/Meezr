@@ -17,18 +17,16 @@ class IngredientsInfo
     connection = Faraday.new(
       url: 'https://api.spoonacular.com/food/ingredients/',
       params: {apiKey: ENV['API_KEY']},
-    )
+    )do |c|
+    c.use Faraday::Response::RaiseError
+  end
 
     response = connection.get(self.id+'/information') do |request|
       request.params['amount'] = self.portion_grams
       request.params['unit'] = 'grams'
-      # req.body = {query: 'butter'}.to_json # would be used for like parseIngredients API i think
     end
-
-    return nil if response.status != 200
   
     data = JSON.parse(response.body)
-    JSON.pretty_generate(data)
   end
 end
 

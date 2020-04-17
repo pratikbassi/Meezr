@@ -10,7 +10,7 @@ class CreateMeal
 
   def initialize(ingredients)
     @ingredients = ingredients
-    @number_results = 1
+    @number_results = 5
     @ranking = 1
     @ignore_pantry = false
     @data = create_meal()
@@ -20,33 +20,27 @@ class CreateMeal
     connection = Faraday.new(
       url: 'https://api.spoonacular.com/recipes/',
       params: {apiKey: ENV['API_KEY']},
-    )
+    )do |c|
+      c.use Faraday::Response::RaiseError
+    end
 
     response = connection.get('findByIngredients') do |request|
       request.params['ingredients'] = @ingredients
       request.params['number'] = @number_results
       request.params['ranking'] = @ranking
       request.params['ignore_pantry'] = @ignore_pantry
-      # req.body = {query: 'butter'}.to_json # would be used for like parseIngredients API i think
     end
 
     return nil if response.status != 200
   
     JSON.parse(response.body)
-    # JSON.pretty_generate(data)
   end
-
-  def get_calories
-    puts "hello"
-    pp @data
-  end
-
 end
 
-supper = CreateMeal.new('apples,flour,sugar')
+# supper = CreateMeal.new('apples,flour,sugar')
 # no_cal = supper.create_meal
-# puts no_cal.get_calories
-supper.get_calories
+# pp no_cal
+# supper.get_calories
 
 
 
