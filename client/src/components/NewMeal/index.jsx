@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Container, Typography, Button } from "@material-ui/core";
 import {} from "@material-ui/icons";
+import axios from "axios";
 
 import Header from "../Header";
 import Footer from "../Footer";
@@ -46,6 +47,14 @@ export default function NewMeal() {
   const handleSubmit = () => {
     console.log("submit!");
     console.log("state!", state);
+    axios
+      .post("/api/meals", state)
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
 
   const handleChange = (event) => {
