@@ -15,20 +15,27 @@ class GetRecipeBalance
   end
 
   def get_recipe_information
-    connection = Faraday.new(
-      url: 'https://api.spoonacular.com/recipes/',
-      params: {apiKey: ENV['API_KEY']},
-    )do |c|
-    c.use Faraday::Response::RaiseError
-    end
+    begin
+      connection = Faraday.new(
+        url: 'https://api.spoonacular.com/recipes/',
+        params: {apiKey: ENV['API_KEY']},
+      )do |c|
+      c.use Faraday::Response::RaiseError
+      end
+  
+      response = connection.get(self.id+'/information') do |request|
+        request.params['id'] = self.id
+        request.params['includeNutrition'] = self.includeNutrition
+      end
+  
+      data = JSON.parse(response.body)
+      data["nutrition"]["caloricBreakdown"]
 
-    response = connection.get(self.id+'/information') do |request|
-      request.params['id'] = self.id
-      request.params['includeNutrition'] = self.includeNutrition
+    rescue Exception => e 
+      status = e.response[:status]
+      response = JSON.parse(e.response[:body])
+      puts "Error #{status} occurred. #{response["message"]}"
     end
-
-    data = JSON.parse(response.body)
-    data["nutrition"]["caloricBreakdown"]
   end
 end
 

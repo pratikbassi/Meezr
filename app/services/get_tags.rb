@@ -16,48 +16,58 @@ class GetTags
   end
 
   def get_tags
-    connection = Faraday.new(
-      url: 'https://api.spoonacular.com/recipes',
-      params: {apiKey: ENV['API_KEY']},
-    )do |c|
-    c.use Faraday::Response::RaiseError
-    end
 
-    response = connection.get(self.id+'/information') do |request|
-      request.params['includeNutrition'] = self.include_nutrtion
-    end
+    begin
+      connection = Faraday.new(
+        url: 'https://api.spoonacular.com/recipes',
+        params: {apiKey: ENV['API_KEY']},
+      )do |c|
+      c.use Faraday::Response::RaiseError
+      end
   
-    data = JSON.parse(response.body)
+      response = connection.get(self.id+'/information') do |request|
+        request.params['includeNutrition'] = self.include_nutrtion
+      end
     
-    if(data["vegetarian"])
-      tags_obj[:vegetarian] = "Vegetarian"
-    end
-    if(data["vegan"])
-      tags_obj[:vegan] = "Vegan"
-    end
-    if (data["glutenFree"])
-      tags_obj[:glutenFree] = "Gluten Free"
-    end
-    if(data["dairyFree"])
-      tags_obj[:dairyFree] = "Dairy Free"
-    end
-    if(data["whole30"])
-      tags_obj[:whole30] = "Whole 30"
-    end
-    if(data["ketogenic"])
-      tags_obj[:ketogenic] = "Ketogenic"
-    end
+      data = JSON.parse(response.body)
+      
+      if(data["vegetarian"])
+        tags_obj[:vegetarian] = "Vegetarian"
+      end
+      if(data["vegan"])
+        tags_obj[:vegan] = "Vegan"
+      end
+      if (data["glutenFree"])
+        tags_obj[:glutenFree] = "Gluten Free"
+      end
+      if(data["dairyFree"])
+        tags_obj[:dairyFree] = "Dairy Free"
+      end
+      if(data["whole30"])
+        tags_obj[:whole30] = "Whole 30"
+      end
+      if(data["ketogenic"])
+        tags_obj[:ketogenic] = "Ketogenic"
+      end
+  
+      #If not matches, meal is best suited for omnivore.
+      if(tags_obj.empty?)
+        tags_obj[:omnivore] = "Omnivore"
+      end
+  
+      tags_obj
 
-    #If not matches, meal is best suited for omnivore.
-    if(tags_obj.empty?)
-      tags_obj[:omnivore] = "Omnivore"
-    end
+    rescue Exception => e 
+      status = e.response[:status]
+      response = JSON.parse(e.response[:body])
+      puts "Error #{status} occurred. #{response["message"]}"
 
-    tags_obj
+    end
+    
 
   end
 end
 
-tags = GetTags.new('82048') #1003464, 716429
-pp tags.get_tags
+# tags = GetTags.new('82048') #1003464, 716429
+# pp tags.get_tags
 

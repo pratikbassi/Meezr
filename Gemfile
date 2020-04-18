@@ -51,5 +51,8 @@ gem "uri", "~> 0.10.0"
 #Gem file used in API calls
 gem 'faraday', '~> 0.9.2'
 
+#Gem file for Faraday middleware
+gem 'faraday_middleware', 
+
 #spoonacluar sdk
 gem 'openapi_client', :git => 'https://github.com/byuno/spoonacular-sdk.git'
