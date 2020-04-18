@@ -66,7 +66,7 @@ export default function Meal(props) {
       ) : null}
 
       <section className={classes.content}>
-        <Typography variant="h3">
+        <Typography variant="h4">
           <Link to={"/meal/" + id} className="btn custom-button">
             {title}
           </Link>

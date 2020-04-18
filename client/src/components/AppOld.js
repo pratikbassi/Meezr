@@ -25,8 +25,17 @@ class App extends Component {
       });
   };
   fetchData2 = () => {
+    const postData = {
+      email: "test@test.com",
+      password: "password",
+    };
+    const axiosConfig = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
     axios
-      .get("/api/meals/16") // You can simply make your requests to "/api/whatever you want"
+      .post("/api/meals", postData, axiosConfig) // You can simply make your requests to "/api/whatever you want"
       .then((response) => {
         // handle success
         console.log(response.data); // The entire response from the Rails API
