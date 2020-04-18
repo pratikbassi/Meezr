@@ -14,21 +14,29 @@ class IngredientsInfo
   end
 
   def get_ingredient_info
-    connection = Faraday.new(
-      url: 'https://api.spoonacular.com/food/ingredients/',
-      params: {apiKey: ENV['API_KEY']},
-    )do |c|
-    c.use Faraday::Response::RaiseError
-  end
 
-    response = connection.get(self.id+'/information') do |request|
-      request.params['amount'] = self.portion_grams
-      request.params['unit'] = 'grams'
+    begin
+      connection = Faraday.new(
+        url: 'https://api.spoonacular.com/food/ingredients/',
+        params: {apiKey: ENV['API_KEY']},
+      )do |c|
+      c.use Faraday::Response::RaiseError
     end
   
-    data = JSON.parse(response.body)
+      response = connection.get(self.id+'/information') do |request|
+        request.params['amount'] = self.portion_grams
+        request.params['unit'] = 'grams'
+      end
+    
+      data = JSON.parse(response.body)
+
+    rescue Exception => e 
+      status = e.response[:status]
+      response = JSON.parse(e.response[:body])
+      puts "Error #{status} occurred. #{response["message"]}"
+    end
   end
 end
 
-pineapple_info = IngredientsInfo.new('9266', 100)
-pp pineapple_info.get_ingredient_info
+# pineapple_info = IngredientsInfo.new('9266', 100)
+# pp pineapple_info.get_ingredient_info

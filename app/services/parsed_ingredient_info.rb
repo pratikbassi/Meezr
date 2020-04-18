@@ -15,27 +15,33 @@ class ParsedIngredientInfo
 
 
   def parsed_ingredient_info
-    
-    data = {
-      ingredientList: @ingredientList.join("\n"),
-      includeNutrition: true,
-      servings: @servings
-    }
 
-    connection = Faraday.new(
-      url: 'https://api.spoonacular.com/recipes/',
-      params: {apiKey: ENV['API_KEY']},
-    )do |c|
-    c.use Faraday::Response::RaiseError
-    end
-
-    response = connection.post('parseIngredients') do |request|
-      request.headers['Content-Type'] = 'application/x-www-form-urlencoded'
-      request.body = URI.encode_www_form(data)
-    end
+    begin
+      data = {
+        ingredientList: @ingredientList.join("\n"),
+        includeNutrition: true,
+        servings: @servings
+      }
   
-    data = JSON.parse(response.body)
+      connection = Faraday.new(
+        url: 'https://api.spoonacular.com/recipes/',
+        params: {apiKey: ENV['API_KEY']},
+      )do |c|
+      c.use Faraday::Response::RaiseError
+      end
+  
+      response = connection.post('parseIngredients') do |request|
+        request.headers['Content-Type'] = 'application/x-www-form-urlencoded'
+        request.body = URI.encode_www_form(data)
+      end
+    
+      data = JSON.parse(response.body)
 
+    rescue Exception => e 
+      status = e.response[:status]
+      response = JSON.parse(e.response[:body])
+      puts "Error #{status} occurred. #{response["message"]}"
+    end
   end
 end
 

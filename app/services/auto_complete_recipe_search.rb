@@ -14,19 +14,26 @@ class AutoCompleteRecipeSearch
   end
 
   def get_ingredient_info
-    connection = Faraday.new(
-      url: 'https://api.spoonacular.com/recipessssssss/',
-      params: {apiKey: ENV['API_KEY']},
-    ) do |c|
-      c.use Faraday::Response::RaiseError
-    end
-
-    response = connection.get('autocomplete') do |request|
-      request.params['query'] = self.query
-      request.params['number'] = self.number
-    end
+    begin
+      connection = Faraday.new(
+        url: 'https://api.spoonacular.com/recipes/',
+        params: {apiKey: ENV['API_KEY']},
+      ) do |c|
+        c.use Faraday::Response::RaiseError
+      end
   
-    data = JSON.parse(response.body)
+      response = connection.get('autocomplete') do |request|
+        request.params['query'] = self.query
+        request.params['number'] = self.number
+      end
+    
+      data = JSON.parse(response.body)
+      
+    rescue Exception => e 
+      status = e.response[:status]
+      response = JSON.parse(e.response[:body])
+      puts "Error #{status} occurred. #{response["message"]}"
+    end    
   end
 end
 

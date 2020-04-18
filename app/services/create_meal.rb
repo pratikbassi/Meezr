@@ -17,30 +17,35 @@ class CreateMeal
   end
 
   def create_meal
-    connection = Faraday.new(
-      url: 'https://api.spoonacular.com/recipes/',
-      params: {apiKey: ENV['API_KEY']},
-    )do |c|
-      c.use Faraday::Response::RaiseError
-    end
-
-    response = connection.get('findByIngredients') do |request|
-      request.params['ingredients'] = @ingredients
-      request.params['number'] = @number_results
-      request.params['ranking'] = @ranking
-      request.params['ignore_pantry'] = @ignore_pantry
-    end
-
-    return nil if response.status != 200
   
+    begin 
+      connection = Faraday.new(
+        url: 'https://api.spoonacular.com/recipes/',
+        params: {apiKey: ENV['API_KEY']},
+      )do |c|
+        c.use Faraday::Response::RaiseError
+      end
+  
+      response = connection.get('findByIngredients') do |request|
+        request.params['ingredients'] = @ingredients
+        request.params['number'] = @number_results
+        request.params['ranking'] = @ranking
+        request.params['ignore_pantry'] = @ignore_pantry
+      end
+    
     JSON.parse(response.body)
+
+    rescue Exception => e 
+      status = e.response[:status]
+      response = JSON.parse(e.response[:body])
+      puts "Error #{status} occurred. #{response["message"]}"
+    end
+    
   end
 end
 
-# supper = CreateMeal.new('apples,flour,sugar')
-# no_cal = supper.create_meal
-# pp no_cal
-# supper.get_calories
+#meal = CreateMeal.new('apples,flour,sugar')
+
 
 
 
