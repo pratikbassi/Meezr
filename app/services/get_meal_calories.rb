@@ -38,6 +38,6 @@ class GetMealCalories
   end
 end
 
-meal_cals = GetMealCalories.new('1003464')
-pp meal_cals.get_meal_calories
+# meal_cals = GetMealCalories.new('1003464')
+# pp meal_cals.get_meal_calories
     
