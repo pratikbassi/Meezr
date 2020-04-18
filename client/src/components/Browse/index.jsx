@@ -68,7 +68,7 @@ export default function App() {
       cost: 0,
       is_favorited: false,
     };
-    return <Meal props={props} />;
+    return <Meal key={id} props={props} />;
   });
 
   return (
