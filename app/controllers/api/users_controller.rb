@@ -1,15 +1,17 @@
-class UsersController < ApplicationController
-  def create params 
-    User.create(
-      :user_name => params.user_name,
-      :email => params.email,
-      :user_password => params.user_password
+class Api::UsersController < ApplicationController
+  def create  
+    newUser = User.new( 
+      user_name: params['user_name'],
+      email: params['email'],
+      user_password: params['user_password']
+
     )
-    return 201
+
+    newUser.save
   end
 
-  def show id 
-    login = User.find(id)
+  def show
+    login = User.find(10)
     return login
   end
 

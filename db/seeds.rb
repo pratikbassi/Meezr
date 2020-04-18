@@ -615,6 +615,111 @@ store_cats = [
 'Sports',
 'Tools'
 ]
+def create_nut
+  nutrition = 
+                  {"nutrients"=>
+                    [{"title"=>"Calories",
+                      "amount"=>rand(1000),
+                      "unit"=>"cal",
+                      "percentOfDailyNeeds"=>2.5},
+                    {"title"=>"Fat",
+                      "amount"=>rand(1000),
+                      "unit"=>"g",
+                      "percentOfDailyNeeds"=>0.18},
+                    {"title"=>"Saturated Fat",
+                      "amount"=>rand(1000),
+                      "unit"=>"g",
+                      "percentOfDailyNeeds"=>0.06},
+                    {"title"=>"Carbohydrates",
+                      "amount"=>rand(1000),
+                      "unit"=>"g",
+                      "percentOfDailyNeeds"=>4.37},
+                    {"title"=>"Net Carbohydrates",
+                      "amount"=>rand(1000),
+                      "unit"=>"g",
+                      "percentOfDailyNeeds"=>4.26},
+                    {"title"=>"Sugar",
+                      "amount"=>rand(1000),
+                      "unit"=>"g",
+                      "percentOfDailyNeeds"=>10.94},
+                    {"title"=>"Cholesterol",
+                      "amount"=>0.0,
+                      "unit"=>"mg",
+                      "percentOfDailyNeeds"=>0.0},
+                    {"title"=>"Sodium",
+                      "amount"=>rand(1000),
+                      "unit"=>"mg",
+                      "percentOfDailyNeeds"=>0.04},
+                    {"title"=>"Protein",
+                      "amount"=>rand(1000),
+                      "unit"=>"g",
+                      "percentOfDailyNeeds"=>1.08},
+                    {"title"=>"Vitamin C",
+                      "amount"=>rand(1000),
+                      "unit"=>"mg",
+                      "percentOfDailyNeeds"=>57.94},
+                    {"title"=>"Manganese",
+                      "amount"=>rand(1000),
+                      "unit"=>"mg",
+                      "percentOfDailyNeeds"=>46.35},
+                    {"title"=>"Vitamin B6",
+                      "amount"=>rand(1000),
+                      "unit"=>"mg",
+                      "percentOfDailyNeeds"=>5.6},
+                    {"title"=>"Fiber",
+                      "amount"=>rand(1000),
+                      "unit"=>"g",
+                      "percentOfDailyNeeds"=>5.6},
+                    {"title"=>"Copper",
+                      "amount"=>rand(1000),
+                      "unit"=>"mg",
+                      "percentOfDailyNeeds"=>5.5},
+                    {"title"=>"Vitamin B1",
+                      "amount"=>rand(1000),
+                      "unit"=>"mg",
+                      "percentOfDailyNeeds"=>5.27},
+                    {"title"=>"Folate",
+                      "amount"=>rand(1000),
+                      "unit"=>"µg",
+                      "percentOfDailyNeeds"=>4.5},
+                    {"title"=>"Potassium",
+                      "amount"=>rand(1000),
+                      "unit"=>"mg",
+                      "percentOfDailyNeeds"=>3.11},
+                    {"title"=>"Magnesium",
+                      "amount"=>rand(1000),
+                      "unit"=>"mg",
+                      "percentOfDailyNeeds"=>3.0},
+                    {"title"=>"Vitamin B3",
+                      "amount"=>rand(1000),
+                      "unit"=>"mg",
+                      "percentOfDailyNeeds"=>2.5},
+                    {"title"=>"Vitamin B5",
+                      "amount"=>rand(1000),
+                      "unit"=>"mg",
+                      "percentOfDailyNeeds"=>2.13},
+                    {"title"=>"Vitamin B2",
+                      "amount"=>rand(1000),
+                      "unit"=>"mg",
+                      "percentOfDailyNeeds"=>1.88},
+                    {"title"=>"Iron",
+                      "amount"=>rand(1000),
+                      "unit"=>"mg",
+                      "percentOfDailyNeeds"=>1.61},
+                    {"title"=>"Calcium",
+                      "amount"=>rand(1000),
+                      "unit"=>"mg",
+                      "percentOfDailyNeeds"=>1.3},
+                    {"title"=>"Vitamin A",
+                      "amount"=>rand(1000),
+                      "unit"=>"IU",
+                      "percentOfDailyNeeds"=>1.16}],
+                  "caloricBreakdown"=> {"percentProtein"=>3.88, "percentFat"=>1.94, "percentCarbs"=>94.18},
+                  "weightPerServing"=> {"amount"=>100, "unit"=>"g"}}
+  return nutrition
+end
+
+
 puts("===SEEDING DATABASE! PLEASE BE PATIENT===")
 for i in 1..100 do
   User.create(
@@ -628,7 +733,7 @@ puts("===Users complete===")
 for i in 1..100 do
   Ingredient.create(
     product: foods[rand(99)], 
-    nut_info: {"calories" => rand(200) }
+    nut_info: create_nut()
     )
 end
 puts("===Ingredients complete===")
@@ -638,7 +743,9 @@ for i in 1..100 do
   Meal.create(
     user_id: rand(1..100),
     is_public: bool_list.sample,
-    is_deleted: bool_list.sample
+    is_deleted: bool_list.sample,
+    title: foods[rand(99)],
+    desc: foods[rand(99)] * 5
   )
 end
 puts("===Meals complete===")
