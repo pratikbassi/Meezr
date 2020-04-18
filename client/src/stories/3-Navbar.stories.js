@@ -1,18 +1,26 @@
 import React from 'react';
-import { action } from '@storybook/addon-actions';
-import  RegisterForm  from '../components/Auth/Register';
+import  Navbar  from '../components/Navbar/index'
 
 
 export default {
-  title: 'Register',
-  component: RegisterForm,
+  title: 'Navbar',
+  component: Navbar,
 };
 
 export const Basic = () => {
 
   
   return (
-    <RegisterForm onClick={action('submit-register')}/>
+    <Navbar />
+
+  );
+}
+
+export const LoggedIn = () => {
+
+  
+  return (
+    <Navbar auth={true} />
 
   );
 }

@@ -638,7 +638,9 @@ for i in 1..100 do
   Meal.create(
     user_id: rand(1..100),
     is_public: bool_list.sample,
-    is_deleted: bool_list.sample
+    is_deleted: bool_list.sample,
+    title: foods[rand(99)],
+    desc: foods[rand(99)] * 5
   )
 end
 puts("===Meals complete===")
