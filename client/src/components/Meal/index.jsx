@@ -31,7 +31,6 @@ const useStyles = makeStyles({
 export default function Meal(props) {
   const [state, setState] = useState(props.props);
 
-  console.log("Meal state: ", state);
   console.log("Meal props: ", props.props);
   const classes = useStyles();
   const {
@@ -62,9 +61,12 @@ export default function Meal(props) {
 
   return (
     <article className={classes.meal}>
-      <img src={image} className={classes.image}></img>
+      {image.length > 0 ? (
+        <img src={image[0].image_url} className={classes.image}></img>
+      ) : null}
+
       <section className={classes.content}>
-        <Typography variant="h3">
+        <Typography variant="h4">
           <Link to={"/meal/" + id} className="btn custom-button">
             {title}
           </Link>
@@ -85,7 +87,7 @@ export default function Meal(props) {
           <br />
 
           {tags.map((tag) => (
-            <Chip label={tag} />
+            <Chip label={tag.category_id} />
           ))}
         </Typography>
       </section>
