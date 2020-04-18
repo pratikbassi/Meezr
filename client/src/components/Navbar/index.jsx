@@ -106,7 +106,7 @@ const registerUser = (data) => {
       }
     }).then((res) => {
       console.log(res)
-    })
+    }).catch((err) => {console.log(err)})
   }
 }
 
@@ -114,15 +114,15 @@ const loginUser = (data) => {
 
   if (data.user_password) {
     axios({
-      method: "post",
-      url: "/api/users",
+      method: "get",
+      url: "/api/login",
       data: {
         email: `${data.email}`,
         user_password: `${data.user_password}`,
       }
     }).then((res) => {
       console.log(res)
-    })
+    }).catch((err) => {console.log(err)})
   }
 }
 
