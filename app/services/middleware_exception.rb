@@ -1,6 +1,8 @@
 require 'faraday'
 require 'faraday_middleware'
 
+# Stretch option - should handle when there is no network connection. 
+
 module Middleware
   class Exceptions < Faraday::Middleware
     def call(env)

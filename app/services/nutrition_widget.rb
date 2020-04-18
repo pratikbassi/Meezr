@@ -16,21 +16,29 @@ class NutritionWidget
   end
 
   def get_nutrition_widget
-    connection = Faraday.new(
-      url: 'https://api.spoonacular.com/recipes/',
-      params: {apiKey: ENV['API_KEY']},
-    )do |c|
-    c.use Faraday::Response::RaiseError
-    end
+    begin
+      connection = Faraday.new(
+        url: 'https://api.spoonacular.com/recipes/',
+        params: {apiKey: ENV['API_KEY']},
+      )do |c|
+      c.use Faraday::Response::RaiseError
+      end
+  
+      response = connection.get(self.id+'/nutritionWidget') do |request|
+        request.params['id'] = self.id
+        request.params['defaultCss'] = self.defaultCss
+      end
+  
+      data = response.body
+      data.delete! '\\'
+      data
 
-    response = connection.get(self.id+'/nutritionWidget') do |request|
-      request.params['id'] = self.id
-      request.params['defaultCss'] = self.defaultCss
+    rescue Exception => e 
+      status = e.response[:status]
+      response = JSON.parse(e.response[:body])
+      puts "Error #{status} occurred. #{response["message"]}"
     end
-
-    data = response.body
-    data.delete! '\\'
-    data
+    
   end
 end
 

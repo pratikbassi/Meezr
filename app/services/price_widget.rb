@@ -42,5 +42,5 @@ class PriceWidget
   end
 end
 
-meal_cals = PriceWidget.new('1082038')
-meal_cals.get_nutrition_widget
+# meal_cals = PriceWidget.new('1082038')
+# pp meal_cals.get_nutrition_widget
