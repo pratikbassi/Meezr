@@ -1,4 +1,5 @@
 require 'faraday'
+require 'faraday_middleware'
 require 'json'
 require 'dotenv'
 Dotenv.load
@@ -13,19 +14,27 @@ class GetMealCalories
   end
 
   def get_meal_calories
-    connection = Faraday.new(
-      url: 'https://api.spoonacular.com/recipes/',
-      params: {apiKey: ENV['API_KEY']},
-    )do |c|
-    c.use Faraday::Response::RaiseError
-    end
 
-    response = connection.get(self.id+'/nutritionWidget.json') do |request|
-      request.params['id'] = self.id
+    begin
+      connection = Faraday.new(
+        url: 'https://api.spoonacular.com/recipes/',
+        params: {apiKey: ENV['API_KEY']},
+      )do |c|
+      c.use Faraday::Response::RaiseError
+      end
+
+      response = connection.get(self.id+'/nutritionWidget.json') do |request|
+        request.params['id'] = self.id
+      end      
+
+      data = JSON.parse(response.body)
+      data["calories"].to_i
+
+    rescue Exception => e 
+      status = e.response[:status]
+      response = JSON.parse(e.response[:body])
+      puts "Error #{status} occurred. #{response["message"]}"
     end
-  
-    data = JSON.parse(response.body)
-    data["calories"]
   end
 end
 
