@@ -39,5 +39,5 @@ class GetRecipeBalance
   end
 end
 
-# recipe_nutrition = GetRecipeBalance.new('716429')
-# pp recipe_nutrition.get_recipe_information
+recipe_nutrition = GetRecipeBalance.new('716429')
+pp recipe_nutrition.get_recipe_information

@@ -68,6 +68,6 @@ class GetTags
   end
 end
 
-# tags = GetTags.new('82048') #1003464, 716429
-# pp tags.get_tags
+tags = GetTags.new('82048') #1003464, 716429
+pp tags.get_tags
 

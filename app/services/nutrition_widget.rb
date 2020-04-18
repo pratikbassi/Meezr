@@ -42,5 +42,5 @@ class NutritionWidget
   end
 end
 
-# meal_cals = NutritionWidget.new('1082038')
-# meal_cals.get_nutrition_widget
+meal_cals = NutritionWidget.new('1082038')
+puts meal_cals.get_nutrition_widget
