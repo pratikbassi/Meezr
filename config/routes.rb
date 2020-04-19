@@ -6,7 +6,7 @@ Rails.application.routes.draw do
     
     get 'ingredient_finder/index', to: 'ingredient_finder#index'
     get '/data', to: 'tests#index'
-    get    '/login' ,to: 'sessions#new'
+    post  '/login' ,to: 'sessions#create'
     get '/logout'  ,to: 'sessions#destroy'
     get "search/:query" =>  "meals#search"
     resources :dogs

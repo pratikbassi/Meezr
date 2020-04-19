@@ -8,10 +8,14 @@ class Api::UsersController < ApplicationController
     )
 
     newUser.save
+
+    returnid = User.find_by_email(params[:email])
+    render :json => { user_id: returnid['id'] } 
+
   end
 
   def show
-    login = User.find(10)
+    login = User.find(params['id'])
     return login
   end
 
