@@ -9,15 +9,18 @@ import NewMeal from "../components/NewMeal";
 export default (
   <Router>
     <Switch>
-      <Route path="/" exact component={Browse} />
+      <Route path="/" exact render={(props) => <Browse props={props} />} />
       <Route
-        path="/search"
+        path="/search/:id"
         exact
-        component={Browse}
-        // render={(props) => <Browse props={props} />}
+        render={(props) => <Browse props={props} />}
       />
       <Route path="/profile" exact component={Profile} />
-      <Route path="/meal/:id" exact component={SingleMeal} />
+      <Route
+        path="/meals/:id"
+        exact
+        render={(props) => <SingleMeal props={props} />}
+      />
       <Route path="/create" exact component={NewMeal} />
     </Switch>
   </Router>

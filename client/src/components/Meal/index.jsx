@@ -150,7 +150,7 @@ export default function Meal(props) {
             <div className={classes.title}>
               <Typography variant="h5">
                 <Link
-                  href={"/meal/" + id}
+                  href={"/meals/" + id}
                   color="inherit"
                   className="btn custom-button"
                 >

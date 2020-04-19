@@ -4,8 +4,6 @@ import { Container, Typography, Button } from "@material-ui/core";
 import {} from "@material-ui/icons";
 import axios from "axios";
 
-import Header from "../Header";
-import Footer from "../Footer";
 import Page1 from "./Page1";
 import Page2 from "./Page2";
 import Page3 from "./Page3";
@@ -128,7 +126,6 @@ export default function NewMeal() {
 
   return (
     <>
-      <Header />
       <Container>
         <Typography variant="h2" className={classes.root}>
           Create a New Meal
@@ -164,7 +161,6 @@ export default function NewMeal() {
           )}
         </form>
       </Container>
-      <Footer />
     </>
   );
 }

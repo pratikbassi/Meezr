@@ -11,16 +11,17 @@ export default function SingleMeal(props) {
   const classes = useStyles();
 
   const [state, setState] = useState([]);
+  const { history, location, match } = props.props;
   console.log("props", props);
-  console.log("props", props.match.params.id);
+  console.log("props", match.params.id);
 
   // reloads data from the database, and then setState
   function getData() {
-    return Promise.resolve(
-      axios.get(`/api/meals/${props.match.params.id}`)
-    ).then((res) => {
-      return setState([res.data]);
-    });
+    return Promise.resolve(axios.get(`/api/${location.pathname}`)).then(
+      (res) => {
+        return setState([res.data]);
+      }
+    );
   }
   console.log("index state", state);
 
@@ -55,6 +56,7 @@ export default function SingleMeal(props) {
       prepTime: 0,
       cost: 0,
       is_favorited: false,
+      is_extended: true,
     };
     return <Meal key={id} props={props} />;
   });

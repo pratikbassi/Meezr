@@ -16,10 +16,16 @@ const useStyles = makeStyles({
 export default function Browse(props) {
   const classes = useStyles();
   const [state, setState] = useState([]);
+  const { history, location, match } = props.props;
+  console.log("props", props);
 
   // reloads data from the database, and then setState
   function getData() {
-    return Promise.resolve(axios.get("/api/meals")).then((res) => {
+    return Promise.resolve(
+      axios.get(
+        `/api/${location.pathname === "/" ? "/meals" : location.pathname}`
+      )
+    ).then((res) => {
       return setState(res.data);
     });
   }
