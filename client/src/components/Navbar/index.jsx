@@ -1,5 +1,4 @@
 import React from 'react';
-import axios from "axios"
 
 import { fade, makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -13,17 +12,14 @@ import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Dialog from '@material-ui/core/Dialog';
 
-import RegisterForm from 'components/Auth/Register';
-import LoginForm from 'components/Auth/Login';
 import { red } from '@material-ui/core/colors';
+import RenderAuth from '../Navbar/RenderAuth'
+import { ThemeProvider } from '@material-ui/core/styles';
+import theme from "theme"
 
 const useStyles = makeStyles((theme) => ({
-  bigBar : {
-    backgroundColor : red
-  },
+
   authStyle: {
     borderRadius: theme.shape.borderRadius,
     margin: theme.spacing(2),
@@ -93,76 +89,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const registerUser = (data) => {
-
-  if (data.user_password === data.confirm_password) {
-    axios({
-      method: "post",
-      url: "/api/users",
-      data: {
-        user_name: `${data.user_name}`,
-        email: `${data.email}`,
-        user_password: `${data.user_password}`,
-      }
-    }).then((res) => {
-      console.log(res)
-    }).catch((err) => {console.log(err)})
-  }
-}
-
-const loginUser = (data) => {
-
-  if (data.user_password) {
-    axios({
-      method: "get",
-      url: "/api/login",
-      data: {
-        email: `${data.email}`,
-        user_password: `${data.user_password}`,
-      }
-    }).then((res) => {
-      console.log(res)
-    }).catch((err) => {console.log(err)})
-  }
-}
-
-function RenderAuth(props) {
-  const classes = useStyles();
-
-  const handleClose = () => {
-    props.onClose();
-  };
-
-  if (props.buttonType === "register"){
-    return (
-      <div className={classes.grow}>
-        <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={props.open}>
-          <DialogTitle id="simple-dialog-title">Welcome to Meez'r!</DialogTitle>
-          <RegisterForm className={classes.inputInput} onClick={registerUser}/>
-        </Dialog>
-      </div>
-    )
-  }
-  if (props.buttonType === "login"){
-    return (
-      <div className={classes.grow}>
-        <Dialog onClose={handleClose} open={props.open} aria-labelledby="simple-dialog-title">
-          <DialogTitle  id="simple-dialog-title">Welcome back!</DialogTitle>
-          <LoginForm className={classes.inputInput} onClick={loginUser}/>
-        </Dialog>
-      </div>
-    )
-  }
-  return null
-}
-
-
-
-
-
-
-
-
 
 export default function Navbar(props) {
   const classes = useStyles();
@@ -197,8 +123,9 @@ export default function Navbar(props) {
 
 
   return (
+    <ThemeProvider theme={theme}>
     <div className={classes.grow}>
-      <AppBar className={classes.bigBar} position="static">
+      <AppBar position="static">
         <Toolbar>
 
           <Typography className={classes.title} variant="h6" noWrap>
@@ -251,5 +178,7 @@ export default function Navbar(props) {
       </AppBar>
       {renderMenu}
     </div>
+    </ThemeProvider >
+
   );
 }
