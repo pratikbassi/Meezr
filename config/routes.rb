@@ -12,6 +12,9 @@ Rails.application.routes.draw do
     resources :dogs
     resources :users
     resources :meals
+    namespace :ingredients do
+      post 'parse', to: 'parse#index'
+    end
 
   end
 
