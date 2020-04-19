@@ -730,14 +730,6 @@ for i in 1..100 do
 end
 puts("===Users complete===")
 
-for i in 1..100 do
-  Ingredient.create(
-    product: foods[rand(99)], 
-    nut_info: create_nut()
-    )
-end
-puts("===Ingredients complete===")
-
 
 for i in 1..100 do
   Meal.create(
@@ -769,23 +761,18 @@ puts("===Meal photos complete===")
 for i in 1..100 do
   MealIngredient.create(
     meal_id: rand(1..100),
-    ingredient_id: rand(1..100),
+    product: foods[rand(99)], 
+    nut_info: create_nut(),
     serving_size: rand(99)
   )
 end
 puts("=== mealingredients complete===")
 
-for i in 1..100 do
-  Category.create(
-    category: store_cats[rand(99)]
-  )
-end
-puts("=== categories complete===")
 
 for i in 1..100 do
   MealCategory.create(
     meal_id: rand(1..100),
-    category_id: rand(1..100)
+    category: store_cats[rand(99)]
   )
 end
 puts("=== mealcategories complete===")
@@ -793,7 +780,7 @@ puts("=== mealcategories complete===")
 for i in 1..100 do
   UserPreference.create(
     user_id: rand(1..100),
-    ingredient_id: rand(1..100),
+    meal_ingredient_id: rand(1..100),
     is_disliked: bool_list.sample
   )
 end

@@ -8,7 +8,7 @@ Rails.application.routes.draw do
     get '/data', to: 'tests#index'
     get    '/login' ,to: 'sessions#new'
     get '/logout'  ,to: 'sessions#destroy'
-    
+    get "search/:query" =>  "meals#search"
     resources :dogs
     resources :users
     resources :meals
