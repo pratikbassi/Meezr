@@ -126,6 +126,8 @@ export default function Navbar(props) {
           },
         })
           .then((res) => {
+            // console.log("new cookie", res);
+            handleClose();
             setCookie(res.data["user_id"]);
             setAuth(Cookies.get("user_id"));
           })
@@ -148,6 +150,8 @@ export default function Navbar(props) {
           },
         })
           .then((res) => {
+            // console.log("setting cookie", res);
+            handleClose();
             setCookie(res.data["user_id"]);
             setAuth(Cookies.get("user_id"));
           })

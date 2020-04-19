@@ -44,7 +44,7 @@ export default function RenderAuth(props) {
           aria-labelledby="simple-dialog-title"
         >
           <DialogTitle id="simple-dialog-title">Welcome back!</DialogTitle>
-          <LoginForm onClick={loginUser} />
+          <LoginForm onSubmit={loginUser} />
         </Dialog>
       </ThemeProvider>
     );
