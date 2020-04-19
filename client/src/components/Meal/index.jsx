@@ -13,9 +13,11 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import { Favorite, FavoriteBorder } from "@material-ui/icons";
 import { Skeleton } from "@material-ui/lab";
+import { ThemeProvider } from "@material-ui/core/styles";
+import theme from "theme";
 // import "./styles.scss";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   expand_panel: {
     backgroundColor: theme.palette.primary.light,
     margin: "1em",
@@ -29,11 +31,12 @@ const useStyles = makeStyles((theme) => ({
   meal: {
     display: "grid",
     gridTemplateAreas:
-      '"image title title favorite" "image description description description" "image stats stats stats" "ingredients ingredients ingredients ingredients"',
-    gridTemplateColumns: "20em 1fr 1fr 4em",
+      '"image title title favorite" "image description description empty" "image stats stats stats"',
+    gridTemplateColumns: "20em 1fr 1fr 6em",
     gridTemplateRows: "6em auto 6em",
     gridGap: "1em",
     height: "20em",
+    width: "100%",
   },
   image: {
     width: "100%",
@@ -130,57 +133,59 @@ export default function Meal(props) {
   };
 
   return (
-    <ExpansionPanel className={classes.expand_panel}>
-      <ExpansionPanelSummary className={classes.expand_summary}>
-        <article className={classes.meal}>
-          {image.length > 0 ? (
-            <img src={image[0].image_url} className={classes.image} />
-          ) : (
-            <img className={classes.image} />
-          )}
+    <ThemeProvider theme={theme}>
+      <ExpansionPanel className={classes.expand_panel}>
+        <ExpansionPanelSummary className={classes.expand_summary}>
+          <article className={classes.meal}>
+            {image.length > 0 ? (
+              <img src={image[0].image_url} className={classes.image} />
+            ) : (
+              <img className={classes.image} />
+            )}
 
-          <div className={classes.title}>
-            <Typography variant="h5">
-              <Link
-                href={"/meal/" + id}
-                color="inherit"
-                className="btn custom-button"
-              >
-                {title}
-              </Link>
+            <div className={classes.title}>
+              <Typography variant="h5">
+                <Link
+                  href={"/meal/" + id}
+                  color="inherit"
+                  className="btn custom-button"
+                >
+                  {title}
+                </Link>
+              </Typography>
+              <Typography variant="subtitle2">Submitted By {user}</Typography>
+            </div>
+            <Typography variant="body2" className={classes.description}>
+              {description}
             </Typography>
-            <Typography variant="subtitle2">Submitted By {user}</Typography>
-          </div>
-          <Typography variant="body2" className={classes.description}>
-            {description}
-          </Typography>
-          <div className={classes.stats}>
-            <Typography variant="body2" className={classes.calories}>
-              Calories: {calories}
-            </Typography>
-            <Typography variant="body2" className={classes.score}>
-              <span>Score: {score}</span>
-            </Typography>
+            <div className={classes.stats}>
+              <Typography variant="body2" className={classes.calories}>
+                Calories: {calories}
+              </Typography>
+              <Typography variant="body2" className={classes.score}>
+                <span>Score: {score}</span>
+              </Typography>
 
-            <Typography variant="body2" className={classes.tags}>
-              {tags.map((tag) => (
-                <Chip label={tag.category_id} />
-              ))}
-            </Typography>
-          </div>
-          <IconButton
-            aria-label="favorite"
-            className={classes.favorite}
-            onClick={() => favItem()}
-            size="large"
-          >
-            {is_favorited ? <Favorite /> : <FavoriteBorder />}
-          </IconButton>
-        </article>
-      </ExpansionPanelSummary>
-      <ExpansionPanelDetails>
-        {expanded ? renderIngredients() : null}
-      </ExpansionPanelDetails>
-    </ExpansionPanel>
+              <Typography variant="body2" className={classes.tags}>
+                {tags.map((tag) => (
+                  <Chip label={tag.category_id} />
+                ))}
+              </Typography>
+            </div>
+            <IconButton
+              aria-label="favorite"
+              className={classes.favorite}
+              onClick={() => favItem()}
+              size="large"
+            >
+              {is_favorited ? <Favorite /> : <FavoriteBorder />}
+            </IconButton>
+          </article>
+        </ExpansionPanelSummary>
+        <ExpansionPanelDetails>
+          {expanded ? renderIngredients() : null}
+        </ExpansionPanelDetails>
+      </ExpansionPanel>
+    </ThemeProvider>
   );
 }
