@@ -1,32 +1,86 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { Container, Typography, IconButton, Chip } from "@material-ui/core";
+import {} from "react-router-dom";
+import {
+  Container,
+  Typography,
+  IconButton,
+  Chip,
+  Link,
+  ExpansionPanel,
+  ExpansionPanelSummary,
+  ExpansionPanelDetails,
+} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Favorite, FavoriteBorder } from "@material-ui/icons";
+import { Skeleton } from "@material-ui/lab";
 // import "./styles.scss";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
+  expand_panel: {
+    backgroundColor: theme.palette.primary.light,
+    margin: "1em",
+    boxShadow: theme.shadows[10],
+    borderRadius: "8px",
+  },
+  expand_summary: {
+    margin: 0,
+    padding: 0,
+  },
   meal: {
     display: "grid",
-    "grid-template-areas": '"image content favorite" "image content empty"',
-    "grid-template-columns": "2fr 7fr 1fr",
-    "grid-template-rows": "4em minmax(20em, 30vh)",
-    "background-color": "red",
+    gridTemplateAreas:
+      '"image title title favorite" "image description description description" "image stats stats stats" "ingredients ingredients ingredients ingredients"',
+    gridTemplateColumns: "20em 1fr 1fr 4em",
+    gridTemplateRows: "6em auto 6em",
+    gridGap: "1em",
+    height: "20em",
   },
   image: {
     width: "100%",
     height: "100%",
-    "object-fit": "cover",
-    "object-position": "50% 50%",
-    "grid-area": "image",
+    objectFit: "cover",
+    objectPosition: "50% 50%",
+    gridArea: "image",
+    padding: "1em 0.4em",
+    borderRadius: "4em",
   },
   favorite: {
-    "grid-area": "favorite",
+    gridArea: "favorite",
   },
-  content: {
-    "grid-area": "content",
+  title: {
+    gridArea: "title",
+    alignSelf: "end",
   },
-});
+  description: {
+    gridArea: "description",
+  },
+  ingredients: {
+    gridArea: "ingredients",
+  },
+  stats: {
+    display: "grid",
+    gridTemplateColumns: "3fr 1fr",
+    gridTemplateRows: "auto 1fr",
+    gridTemplateAreas: '"calories score" "tags tags"',
+    gridArea: "stats",
+  },
+  calories: {
+    gridArea: "calories",
+  },
+  score: {
+    gridArea: "score",
+  },
+  preptime: {
+    gridArea: "preptime",
+  },
+  tags: {
+    gridArea: "tags",
+    alignSelf: "end",
+  },
+  cost: {
+    gridArea: "cost",
+  },
+}));
 
 export default function Meal(props) {
   const [state, setState] = useState(props.props);
@@ -59,45 +113,74 @@ export default function Meal(props) {
     });
   };
 
+  const expanded = true;
+
+  const renderIngredients = () => {
+    return (
+      <div className={classes.ingredients}>
+        <Typography variant="body2">Ingredients here</Typography>
+        <Typography variant="body2" className={classes.cost}>
+          Approx Cost: {cost}
+        </Typography>
+        <Typography variant="body2" className={classes.preptime}>
+          Prep Time: {prepTime}
+        </Typography>
+      </div>
+    );
+  };
+
   return (
-    <article className={classes.meal}>
-      {image.length > 0 ? (
-        <img src={image[0].image_url} className={classes.image}></img>
-      ) : null}
+    <ExpansionPanel className={classes.expand_panel}>
+      <ExpansionPanelSummary className={classes.expand_summary}>
+        <article className={classes.meal}>
+          {image.length > 0 ? (
+            <img src={image[0].image_url} className={classes.image} />
+          ) : (
+            <img className={classes.image} />
+          )}
 
-      <section className={classes.content}>
-        <Typography variant="h4">
-          <Link to={"/meal/" + id} className="btn custom-button">
-            {title}
-          </Link>
-        </Typography>
-        <Typography variant="subtitle1">Submitted By: {user}</Typography>
-        <Typography variant="body2" paragraph={true}>
-          <span>{description}</span>
-          <br />
-          <span>Calories{calories}</span>
-          <br />
-          <span>Score: {score}</span>
-          <br />
-          <span>{description}</span>
-          <br />
-          <span>Prep Time: {prepTime}</span>
-          <br />
-          <span>Estimated Cost: {cost}</span>
-          <br />
+          <div className={classes.title}>
+            <Typography variant="h5">
+              <Link
+                href={"/meal/" + id}
+                color="inherit"
+                className="btn custom-button"
+              >
+                {title}
+              </Link>
+            </Typography>
+            <Typography variant="subtitle2">Submitted By {user}</Typography>
+          </div>
+          <Typography variant="body2" className={classes.description}>
+            {description}
+          </Typography>
+          <div className={classes.stats}>
+            <Typography variant="body2" className={classes.calories}>
+              Calories: {calories}
+            </Typography>
+            <Typography variant="body2" className={classes.score}>
+              <span>Score: {score}</span>
+            </Typography>
 
-          {tags.map((tag) => (
-            <Chip label={tag.category_id} />
-          ))}
-        </Typography>
-      </section>
-      <IconButton
-        aria-label="favorite"
-        className={classes.favorite}
-        onClick={() => favItem()}
-      >
-        {is_favorited ? <Favorite /> : <FavoriteBorder />}
-      </IconButton>
-    </article>
+            <Typography variant="body2" className={classes.tags}>
+              {tags.map((tag) => (
+                <Chip label={tag.category_id} />
+              ))}
+            </Typography>
+          </div>
+          <IconButton
+            aria-label="favorite"
+            className={classes.favorite}
+            onClick={() => favItem()}
+            size="large"
+          >
+            {is_favorited ? <Favorite /> : <FavoriteBorder />}
+          </IconButton>
+        </article>
+      </ExpansionPanelSummary>
+      <ExpansionPanelDetails>
+        {expanded ? renderIngredients() : null}
+      </ExpansionPanelDetails>
+    </ExpansionPanel>
   );
 }
