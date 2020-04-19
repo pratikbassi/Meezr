@@ -4,6 +4,8 @@ import {Grid } from "@material-ui/core";
 import SendRoundedIcon from '@material-ui/icons/SendRounded';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
+import { ThemeProvider } from '@material-ui/core/styles';
+import theme from "theme"
 
 
 const useStyles = makeStyles((theme) => ({
@@ -27,6 +29,8 @@ export default function LoginForm(params) {
 
   return (
     <form> 
+      <ThemeProvider theme={theme}> 
+
       <Grid container>
 
         <Grid className={classes.formItem} item>       
@@ -53,6 +57,7 @@ export default function LoginForm(params) {
           Login
         </Button>
       </Grid>
+      </ThemeProvider>
     </form>
   );
 }
