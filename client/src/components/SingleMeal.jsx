@@ -5,30 +5,26 @@ import {} from "@material-ui/icons";
 import axios from "axios";
 
 import Meal from "./Meal";
-import Header from "./Header";
-import Footer from "./Footer";
-
 const useStyles = makeStyles({});
 
 export default function SingleMeal(props) {
   const classes = useStyles();
 
   const [state, setState] = useState([]);
-  console.log("props", props);
-  console.log("props", props.match.params.id);
+  const { history, location, match } = props.props;
 
   // reloads data from the database, and then setState
   function getData() {
-    return Promise.resolve(
-      axios.get(`/api/meals/${props.match.params.id}`)
-    ).then((res) => {
-      return setState([res.data]);
-    });
+    return Promise.resolve(axios.get(`/api/${location.pathname}`)).then(
+      (res) => {
+        return setState([res.data]);
+      }
+    );
   }
-  console.log("index state", state);
+  // console.log("index state", state);
 
   useEffect(() => {
-    console.log("index GetData", state);
+    // console.log("index GetData", state);
 
     getData();
   }, []);
@@ -58,20 +54,14 @@ export default function SingleMeal(props) {
       prepTime: 0,
       cost: 0,
       is_favorited: false,
+      is_extended: true,
     };
     return <Meal key={id} props={props} />;
   });
 
-  useEffect(() => {
-    console.log("useEffect Fired");
-    // getData();
-  }, []);
-
   return (
     <>
-      <Header />
       <Container>{meals}</Container>
-      <Footer />
     </>
   );
 }

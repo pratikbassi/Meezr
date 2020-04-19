@@ -14,13 +14,20 @@ Rails.application.routes.draw do
     
     get 'ingredient_finder/index', to: 'ingredient_finder#index'
     get '/data', to: 'tests#index'
-    get    '/login' ,to: 'sessions#new'
+    post  '/login' ,to: 'sessions#create'
     get '/logout'  ,to: 'sessions#destroy'
+<<<<<<< HEAD
     
     resources :favorites
+=======
+    get "search/:query" =>  "meals#search"
+>>>>>>> e09e7b8fce78fc51f837719ea875d6d9153322f2
     resources :dogs
     resources :users
     resources :meals
+    namespace :ingredients do
+      post 'parse', to: 'parse#index'
+    end
 
   end
 
