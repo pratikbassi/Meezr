@@ -13,10 +13,11 @@ import Menu from '@material-ui/core/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 
-import { red } from '@material-ui/core/colors';
 import RenderAuth from '../Navbar/RenderAuth'
 import { ThemeProvider } from '@material-ui/core/styles';
 import theme from "theme"
+import SearchBox from "../Navbar/search"
+
 
 const useStyles = makeStyles((theme) => ({
 
@@ -132,11 +133,8 @@ export default function Navbar(props) {
             Meez'r
           </Typography>
           <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
-            </div>
-            <InputBase
-              placeholder="Search…"
+
+            <SearchBox
               classes={{
                 root: classes.inputRoot,
                 input: classes.inputInput,
@@ -144,6 +142,7 @@ export default function Navbar(props) {
               inputProps={{ 'aria-label': 'search' }}
             />
           </div>
+
           <div className={classes.grow} />
           {auth && (
             <div >
