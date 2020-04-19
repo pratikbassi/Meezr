@@ -12,8 +12,6 @@ export default function SingleMeal(props) {
 
   const [state, setState] = useState([]);
   const { history, location, match } = props.props;
-  console.log("props", props);
-  console.log("props", match.params.id);
 
   // reloads data from the database, and then setState
   function getData() {
@@ -23,10 +21,10 @@ export default function SingleMeal(props) {
       }
     );
   }
-  console.log("index state", state);
+  // console.log("index state", state);
 
   useEffect(() => {
-    console.log("index GetData", state);
+    // console.log("index GetData", state);
 
     getData();
   }, []);

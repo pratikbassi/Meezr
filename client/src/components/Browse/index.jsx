@@ -29,11 +29,10 @@ export default function Browse(props) {
       return setState(res.data);
     });
   }
-  console.log("index state", state);
+  // console.log("index state", state);
 
   useEffect(() => {
-    console.log("index GetData", state);
-
+    // console.log("index GetData", state);
     getData();
   }, [match.params]);
 
