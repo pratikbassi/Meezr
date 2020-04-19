@@ -35,7 +35,7 @@ export default function Browse(props) {
     console.log("index GetData", state);
 
     getData();
-  }, []);
+  }, [match.params]);
 
   const meals = state.map((meal) => {
     const {

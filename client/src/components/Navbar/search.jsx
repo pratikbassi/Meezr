@@ -1,32 +1,21 @@
-import React from 'react';
-import axios from "axios"
+import React from "react";
+import axios from "axios";
+import { useHistory } from "react-router-dom";
 
-import theme from "theme"
-import { ThemeProvider } from '@material-ui/core/styles';
-import { TextField, Input } from '@material-ui/core';
-import InputBase from '@material-ui/core/InputBase';
-import SearchBar from 'material-ui-search-bar'
-
-
-
-
-
+import theme from "theme";
+import { ThemeProvider } from "@material-ui/core/styles";
+import { TextField, Input } from "@material-ui/core";
+import InputBase from "@material-ui/core/InputBase";
+import SearchBar from "material-ui-search-bar";
 
 export default function SearchBox(props) {
-
-  const [state, setState] = React.useState(props.search || "")
-
+  const [state, setState] = React.useState(props.search || "");
+  let history = useHistory();
 
   const search = (data) => {
-    if (data) {
-      axios({
-        method: "get",
-        url: `/api/search/${data}`,
-      }).then((res) => {
-        console.log(res)
-      }).catch((err) => {console.log(err)})
-    }
-  }
+    console.log("search hit");
+    history.push(`/search/${data}`);
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -35,11 +24,6 @@ export default function SearchBox(props) {
         onChange={(newValue) => setState(newValue)}
         onRequestSearch={() => search(state)}
       />
-
     </ThemeProvider>
-
-  )
-  
+  );
 }
-
-

@@ -1,13 +1,17 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
+import Navbar from "../components/Navbar/index";
+
 import Browse from "../components/Browse";
 import Profile from "../components/Profile";
 import SingleMeal from "../components/SingleMeal";
 import NewMeal from "../components/NewMeal";
+import FloatingCreateButton from "../components/FloatingCreateButton";
 
 export default (
   <Router>
+    <Navbar />
     <Switch>
       <Route path="/" exact render={(props) => <Browse props={props} />} />
       <Route
@@ -23,5 +27,6 @@ export default (
       />
       <Route path="/create" exact component={NewMeal} />
     </Switch>
+    <FloatingCreateButton />
   </Router>
 );

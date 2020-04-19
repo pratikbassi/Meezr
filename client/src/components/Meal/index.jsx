@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {} from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 import {
   Container,
   Typography,
@@ -88,7 +88,7 @@ const useStyles = makeStyles(() => ({
 export default function Meal(props) {
   const [state, setState] = useState(props.props);
 
-  console.log("Meal props: ", props.props);
+  // console.log("Meal props: ", props.props);
   const classes = useStyles();
   const {
     id,
@@ -150,7 +150,8 @@ export default function Meal(props) {
             <div className={classes.title}>
               <Typography variant="h5">
                 <Link
-                  href={"/meals/" + id}
+                  component={RouterLink}
+                  to={"/meals/" + id}
                   color="inherit"
                   className="btn custom-button"
                 >
