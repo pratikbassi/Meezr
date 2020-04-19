@@ -61,6 +61,15 @@ class App extends Component {
       });
   };
 
+  //Test favorite function
+  fetchData4 = () => {
+    axios
+    .get("/api/favorite")
+    .then((response) => {
+      console.log(response.data);
+    });
+  };
+
   render() {
     return (
       <div className="App">
@@ -68,6 +77,7 @@ class App extends Component {
         <button onClick={this.fetchData}>Fetch Data</button>
         <button onClick={this.fetchData2}>Fetch Data2</button>
         <button onClick={this.fetchData3}>Fetch Data3</button>
+        <button onClick={this.fetchData4}>Fetch Data4</button>
         <h1>{this.state.message2}</h1>
       </div>
     );
