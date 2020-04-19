@@ -10,6 +10,12 @@ export default (
   <Router>
     <Switch>
       <Route path="/" exact component={Browse} />
+      <Route
+        path="/search"
+        exact
+        component={Browse}
+        // render={(props) => <Browse props={props} />}
+      />
       <Route path="/profile" exact component={Profile} />
       <Route path="/meal/:id" exact component={SingleMeal} />
       <Route path="/create" exact component={NewMeal} />

@@ -121,7 +121,11 @@ export default function Meal(props) {
   const renderIngredients = () => {
     return (
       <div className={classes.ingredients}>
-        <Typography variant="body2">Ingredients here</Typography>
+        <Typography variant="body2">
+          {ingredients.map((ingredient) => (
+            <p>{ingredient.product}</p>
+          ))}
+        </Typography>
         <Typography variant="body2" className={classes.cost}>
           Approx Cost: {cost}
         </Typography>
@@ -168,7 +172,7 @@ export default function Meal(props) {
 
               <Typography variant="body2" className={classes.tags}>
                 {tags.map((tag) => (
-                  <Chip label={tag.category_id} />
+                  <Chip label={tag.category} />
                 ))}
               </Typography>
             </div>

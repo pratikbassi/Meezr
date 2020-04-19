@@ -5,9 +5,6 @@ import {} from "@material-ui/icons";
 import axios from "axios";
 
 import Meal from "./Meal";
-import Header from "./Header";
-import Footer from "./Footer";
-
 const useStyles = makeStyles({});
 
 export default function SingleMeal(props) {
@@ -62,16 +59,9 @@ export default function SingleMeal(props) {
     return <Meal key={id} props={props} />;
   });
 
-  useEffect(() => {
-    console.log("useEffect Fired");
-    // getData();
-  }, []);
-
   return (
     <>
-      <Header />
       <Container>{meals}</Container>
-      <Footer />
     </>
   );
 }

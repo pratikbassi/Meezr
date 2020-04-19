@@ -1,30 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Fab, Container } from "@material-ui/core";
-// import AddIcon from "@material-ui/icons/Add";
-import { Add } from "@material-ui/icons";
-// import "./App.scss";
+import { Container } from "@material-ui/core";
 import axios from "axios";
 
 import Meal from "../Meal";
-import Header from "../Header";
-import Footer from "../Footer";
 import Filter from "./Filter";
 
 const useStyles = makeStyles({
-  fabNew: {
-    float: "right",
-    position: "fixed",
-    bottom: "3em",
-    right: "3em",
-  },
   browse: {
     display: "grid",
     "grid-template-columns": "1fr 3fr 1fr",
   },
 });
 
-export default function App() {
+export default function Browse(props) {
   const classes = useStyles();
   const [state, setState] = useState([]);
 
@@ -54,7 +43,7 @@ export default function App() {
       meal_categories,
       user,
     } = meal;
-    const props = {
+    const mealProps = {
       id: id,
       image: meal_photos,
       title: title,
@@ -68,20 +57,15 @@ export default function App() {
       cost: 0,
       is_favorited: false,
     };
-    return <Meal key={id} props={props} />;
+    return <Meal key={id} props={mealProps} />;
   });
 
   return (
     <>
-      <Header />
       <div className={classes.browse}>
         <Filter />
         <Container>{meals}</Container>
       </div>
-      <Fab color="primary" aria-label="Add" className={classes.fabNew}>
-        <Add />
-      </Fab>
-      <Footer />
     </>
   );
 }
