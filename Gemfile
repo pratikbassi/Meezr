@@ -49,7 +49,7 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem "uri", "~> 0.10.0"
 
 #Gem file used in API calls
-gem 'faraday', '~> 0.9.2'
+gem 'faraday'
 
 #Gem file for Faraday middleware
 gem 'faraday_middleware'
