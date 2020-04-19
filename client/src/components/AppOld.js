@@ -12,8 +12,12 @@ class App extends Component {
   }
 
   fetchData = () => {
+    const data = {
+      ingredients: ["carrot", "banana"],
+      servings: 1,
+    };
     axios
-      .get("/api/ingredient_finder/index") // You can simply make your requests to "/api/whatever you want"
+      .post("/api/ingredients/parse", data) // You can simply make your requests to "/api/whatever you want"
       .then((response) => {
         // handle success
         console.log(response.data); // The entire response from the Rails API
