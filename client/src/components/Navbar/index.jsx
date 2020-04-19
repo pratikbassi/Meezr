@@ -10,13 +10,13 @@ import Button from '@material-ui/core/Button';
 
 
 import Menu from '@material-ui/core/Menu';
-import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 
 import RenderAuth from '../Navbar/RenderAuth'
 import { ThemeProvider } from '@material-ui/core/styles';
 import theme from "theme"
 import SearchBox from "../Navbar/search"
+import Cookies from 'js-cookie'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -93,7 +93,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Navbar(props) {
   const classes = useStyles();
-  const [auth, setAuth] = React.useState(props.auth || false);
+  const [auth, setAuth] = React.useState(Cookies.get("user_id") || null);
   const [popup, setPopup] = React.useState(props.popup || false)
   const [button, setButton] = React.useState(null)
 
@@ -109,6 +109,48 @@ export default function Navbar(props) {
     setButton(null)
   };
 
+  const logout = () => {
+    setAuth(null);
+    Cookies.remove('user_id')
+    location.reload();
+
+  }
+
+
+
+  const CheckAuth = () => {
+    if (auth) {
+      return (
+        <div >
+        <IconButton
+          edge="end"
+          aria-label="account of current user"
+          aria-controls={menuId}
+          aria-haspopup="true"
+          color="inherit"
+        >
+          <AccountCircle />
+        </IconButton>
+        <Button onClick={() => logout()} color="inherit">Logout</Button>
+      </div>
+      )
+    }
+    else {
+      return (
+        <div>
+          <Button color="inherit" onClick={ () => {handleClickOpen('register')}}>Register</Button>
+          <Button color="inherit" onClick={ () => {handleClickOpen('login')}}>Login</Button>
+          <RenderAuth onClose={handleClose} open={popup} buttonType={button}/>
+        </div>
+    )
+    }
+  }
+
+
+
+  React.useEffect(() => {
+  }, [auth])
+
 
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
@@ -121,7 +163,6 @@ export default function Navbar(props) {
 
     </Menu>
   );
-
 
   return (
     <ThemeProvider theme={theme}>
@@ -144,34 +185,7 @@ export default function Navbar(props) {
           </div>
 
           <div className={classes.grow} />
-          {auth && (
-            <div >
-            
-            <IconButton
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton>
-
-            <Button color="inherit">Logout</Button>
-          </div>
-
-          )}
-          {!auth && (
-            <div>
-              <Button color="inherit" onClick={ () => {handleClickOpen('register')}}>Register</Button>
-
-              <Button color="inherit" onClick={ () => {handleClickOpen('login')}}>Login</Button>
-              <RenderAuth onClose={handleClose} open={popup} buttonType={button}/>
-            </div>
-            
-
-
-          )}
+          <CheckAuth/>
           
         </Toolbar>
       </AppBar>

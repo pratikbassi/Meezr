@@ -12,43 +12,57 @@ import LoginForm from 'components/Auth/Login';
 
 import theme from "theme"
 import { ThemeProvider } from '@material-ui/core/styles';
+import Cookies from 'js-cookie'
 
 const useStyles = makeStyles((theme) => ({
 
 
 }))
 
+const setCookie = (cookieID) => {
+  Cookies.set('user_id', cookieID)
+}
+
 const registerUser = (data) => {
 
   if (data.user_password === data.confirm_password) {
-    axios({
-      method: "post",
-      url: "/api/users",
-      data: {
-        user_name: `${data.user_name}`,
-        email: `${data.email}`,
-        user_password: `${data.user_password}`,
-      }
-    }).then((res) => {
-      console.log(res)
-    }).catch((err) => {console.log(err)})
+    return Promise.resolve(
+      axios({
+        method: "post",
+        url: "/api/users",
+        data: {
+          user_name: `${data.user_name}`,
+          email: `${data.email}`,
+          user_password: `${data.user_password}`,
+        }
+      }).then((res) => {
+        setCookie(res.data['user_id'])
+        location.reload();
+
+      }).catch((err) => {console.log(err)})
+    )
+    
   }
 }
 
 const loginUser = (data) => {
 
-  if (data.user_password) {
-    axios({
-      method: "get",
-      url: "/api/login",
-      data: {
-        email: `${data.email}`,
-        user_password: `${data.user_password}`,
-      }
-    }).then((res) => {
-      console.log(res)
-    }).catch((err) => {console.log(err)})
-  }
+  if (data.user_password && data.email) {
+    return Promise.resolve(
+      axios({
+        method: "post",
+        url: "/api/login",
+        data: {
+          email: `${data.email}`,
+          user_password: `${data.user_password}`,
+        }
+      }).then((res) => {
+        setCookie(res.data['user_id'])
+        location.reload();
+
+      }).catch((err) => {console.log(err)})
+    )
+  } 
 }
 
 export default function RenderAuth(props) {
