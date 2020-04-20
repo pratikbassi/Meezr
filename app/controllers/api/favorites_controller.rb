@@ -1,10 +1,9 @@
 class Api::FavoritesController < ApplicationController
   def new
-    @user = request.cookies["user_id"]
-    
   end 
 
   def index
+    # puts session[]
     render json: Favorite.includes([:user, :meal]).limit(1000), include: [:meal, :user => {:only => :user_name}]
   end
 
@@ -14,10 +13,13 @@ class Api::FavoritesController < ApplicationController
   end
 
   def create
-    Favorite.create(:id => 100, :meal_id => 666 , :user_id => 100)
-   
-      render :json => { message: 'Favorite has been added'}
-    # else
+    
+    userID = request.cookies["user_id"]
+    pp userID
+    Favorite.create(:meal_id => 84 , :user_id => userID)
+  
+    render :json => { message: 'Favorite has been added'}
+    # else0
     #   render :json => { message: "Something went wrong"}
     # end
     # favorite = Favorite.create(id: @user, meal: @meal)
