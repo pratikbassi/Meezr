@@ -12,6 +12,8 @@ class Api::MealsController < ApplicationController
     data = JSON.parse(request.body.read)
     p data.class
     pp data
+    pp request.cookies["user_id"]
+    pp request.cookies.class
     # pp request.raw_post
     render :json => { message: "Hit Create Entry" }
   end

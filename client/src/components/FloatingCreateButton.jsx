@@ -19,8 +19,13 @@ export default function FloatingCreateButton(props) {
   let history = useHistory();
 
   return (
-    <Fab color="primary" aria-label="Add" className={classes.fabNew}>
-      <Add onClick={() => history.push(`/create`)} />
+    <Fab
+      color="primary"
+      aria-label="Add"
+      className={classes.fabNew}
+      onClick={() => history.push(`/create`)}
+    >
+      <Add />
     </Fab>
   );
 }
