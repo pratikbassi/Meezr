@@ -17,6 +17,8 @@ import { ThemeProvider } from "@material-ui/core/styles";
 import theme from "theme";
 // import "./styles.scss";
 
+import Details from "./Details";
+
 const useStyles = makeStyles(() => ({
   expand_panel: {
     backgroundColor: theme.palette.primary.light,
@@ -87,7 +89,6 @@ const useStyles = makeStyles(() => ({
 
 export default function Meal(props) {
   const [state, setState] = useState(props.props);
-
   // console.log("Meal props: ", props.props);
   const classes = useStyles();
   const {
@@ -109,6 +110,15 @@ export default function Meal(props) {
     setState(props.props);
   }, []);
 
+  const [expanded, setExpanded] = useState(props.props.is_expanded || false);
+
+  useEffect(() => {
+    if (expanded) {
+      // renderIngredients
+    } else {
+    }
+  }, [expanded]);
+
   const favItem = () => {
     // const newFavState = is_favorited
     setState((prev) => {
@@ -116,29 +126,16 @@ export default function Meal(props) {
     });
   };
 
-  const expanded = true;
+  const handleExpand = (e, is_expanded) => {
+    console.log("handleexpanded", e);
+    console.log("is_expanded", is_expanded);
 
-  const renderIngredients = () => {
-    return (
-      <div className={classes.ingredients}>
-        <Typography variant="body2">
-          {ingredients.map((ingredient) => (
-            <p>{ingredient.product}</p>
-          ))}
-        </Typography>
-        <Typography variant="body2" className={classes.cost}>
-          Approx Cost: {cost}
-        </Typography>
-        <Typography variant="body2" className={classes.preptime}>
-          Prep Time: {prepTime}
-        </Typography>
-      </div>
-    );
+    setExpanded(is_expanded);
   };
 
   return (
     <ThemeProvider theme={theme}>
-      <ExpansionPanel className={classes.expand_panel}>
+      <ExpansionPanel className={classes.expand_panel} onChange={handleExpand}>
         <ExpansionPanelSummary className={classes.expand_summary}>
           <article className={classes.meal}>
             {image.length > 0 ? (
@@ -181,14 +178,20 @@ export default function Meal(props) {
               aria-label="favorite"
               className={classes.favorite}
               onClick={() => favItem()}
-              size="large"
             >
               {is_favorited ? <Favorite /> : <FavoriteBorder />}
             </IconButton>
           </article>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
-          {expanded ? renderIngredients() : null}
+          {/* {expanded ? () => renderIngredients() : null} */}
+          {expanded && (
+            <Details
+              className={classes.ingredients}
+              props={props}
+              state={state}
+            />
+          )}
         </ExpansionPanelDetails>
       </ExpansionPanel>
     </ThemeProvider>
