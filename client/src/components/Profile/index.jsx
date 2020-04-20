@@ -15,7 +15,11 @@ export default function Profile() {
 
 
   const getMealsForUser = (user) => {
-    return Promise.resolve(axios.)
+    return Promise.resolve(axios({
+      method: "get",
+      url: `/api/users/${user}`,
+
+    }))
   }
 
   const classes = useStyles();

@@ -16,7 +16,9 @@ class Api::UsersController < ApplicationController
 
   def show
     login = User.find(params['id'])
-    return login
+    meals = Meal.where(user_id: params['id'])
+    favorites = Favorite.where(user_id: params['id'])
+    render :json => {user_name: login['user_name'], meals: meals, favorites:favorites}
   end
 
 
