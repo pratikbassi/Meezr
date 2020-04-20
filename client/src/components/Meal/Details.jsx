@@ -44,7 +44,7 @@ export default function Details(props) {
       servings: 1,
       includeNutrition: true,
     };
-    console.log("data", data);
+    console.log("api call data:", data);
 
     return axios.post("/api/ingredients/parse", data);
   };
@@ -66,33 +66,31 @@ export default function Details(props) {
     return (
       <>
         <Typography variant="body2">Prep Time: {prepTime}</Typography>
-        <Grow in="true">
-          <Card>
-            <CardHeader title={"Ingredients"} />
-            <CardContent>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Ingredients</TableCell>
-                    <TableCell align="right">Calories</TableCell>
-                    <TableCell align="right">Price ($)</TableCell>
+        <Card>
+          <CardHeader title={"Ingredients"} />
+          <CardContent>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Ingredients</TableCell>
+                  <TableCell align="right">Calories</TableCell>
+                  <TableCell align="right">Price ($)</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {array.map((ingredient) => (
+                  <TableRow key={ingredient.id}>
+                    <TableCell component="th" scope="row">
+                      {ingredient.originalName}
+                    </TableCell>
+                    <TableCell align="right">fat</TableCell>
+                    <TableCell align="right">price</TableCell>
                   </TableRow>
-                </TableHead>
-                <TableBody>
-                  {array.map((ingredient) => (
-                    <TableRow key={ingredient.id}>
-                      <TableCell component="th" scope="row">
-                        {ingredient.originalName}
-                      </TableCell>
-                      <TableCell align="right">fat</TableCell>
-                      <TableCell align="right">price</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
-        </Grow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
 
         <Typography variant="body2">Approx Cost: {cost}</Typography>
       </>

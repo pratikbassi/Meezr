@@ -9,9 +9,21 @@ import {
   ExpansionPanel,
   ExpansionPanelSummary,
   ExpansionPanelDetails,
+  Card,
+  CardHeader,
+  CardMedia,
+  CardContent,
+  CardActions,
+  Collapse,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { Favorite, FavoriteBorder } from "@material-ui/icons";
+import {
+  Favorite,
+  FavoriteBorder,
+  ExpandMore,
+  Share,
+} from "@material-ui/icons";
+import clsx from "clsx";
 import { Skeleton } from "@material-ui/lab";
 import { ThemeProvider } from "@material-ui/core/styles";
 import theme from "theme";
@@ -20,70 +32,61 @@ import theme from "theme";
 import Details from "./Details";
 
 const useStyles = makeStyles(() => ({
-  expand_panel: {
-    backgroundColor: theme.palette.primary.light,
-    margin: "1em",
-    boxShadow: theme.shadows[10],
-    borderRadius: "8px",
-  },
-  expand_summary: {
-    margin: 0,
-    padding: 0,
-  },
   meal: {
     display: "grid",
     gridTemplateAreas:
-      '"image title title favorite" "image description description empty" "image stats stats stats"',
-    gridTemplateColumns: "20em 1fr 1fr 6em",
-    gridTemplateRows: "6em auto 6em",
+      '"image title" "image content" "image share" "collapse collapse"',
+    gridTemplateColumns: "20em auto",
+    gridTemplateRows: "6em auto auto auto",
     gridGap: "1em",
-    height: "20em",
     width: "100%",
-  },
-  image: {
-    width: "100%",
-    height: "100%",
-    objectFit: "cover",
-    objectPosition: "50% 50%",
-    gridArea: "image",
-    padding: "1em 0.4em",
-    borderRadius: "4em",
-  },
-  favorite: {
-    gridArea: "favorite",
   },
   title: {
     gridArea: "title",
     alignSelf: "end",
   },
+  image: {
+    gridArea: "image",
+    height: "20em",
+  },
+  content: {
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr",
+    gridTemplateRows: "auto auto auto",
+    gridTemplateAreas: '"description description" "calories score" "tags tags"',
+    gridArea: "content",
+  },
   description: {
     gridArea: "description",
   },
-  ingredients: {
-    gridArea: "ingredients",
-  },
-  stats: {
-    display: "grid",
-    gridTemplateColumns: "3fr 1fr",
-    gridTemplateRows: "auto 1fr",
-    gridTemplateAreas: '"calories score" "tags tags"',
-    gridArea: "stats",
-  },
   calories: {
     gridArea: "calories",
-  },
-  score: {
-    gridArea: "score",
-  },
-  preptime: {
-    gridArea: "preptime",
   },
   tags: {
     gridArea: "tags",
     alignSelf: "end",
   },
-  cost: {
-    gridArea: "cost",
+  score: {
+    gridArea: "score",
+  },
+  share: {
+    gridArea: "share",
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr 10fr",
+    gridTemplateRows: "auto",
+  },
+  expandIcon: {
+    justifySelf: "end",
+    transform: "rotate(0deg)",
+    transition: theme.transitions.create("transform", {
+      duration: theme.transitions.duration.shortest,
+    }),
+  },
+  expandOpen: {
+    transform: "rotate(180deg)",
+  },
+  collapse: {
+    gridArea: "collapse",
   },
 }));
 
@@ -111,6 +114,7 @@ export default function Meal(props) {
   }, []);
 
   const [expanded, setExpanded] = useState(props.props.is_expanded || false);
+  // const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
     if (expanded) {
@@ -126,74 +130,91 @@ export default function Meal(props) {
     });
   };
 
-  const handleExpand = (e, is_expanded) => {
-    console.log("handleexpanded", e);
-    console.log("is_expanded", is_expanded);
+  // const handleExpand = (e, is_expanded) => {
+  //   console.log("handleexpanded", e);
+  //   console.log("is_expanded", is_expanded);
 
-    setExpanded(is_expanded);
+  //   setExpanded(is_expanded);
+  // };
+
+  const handleExpandClick = () => {
+    setExpanded(!expanded);
   };
 
   return (
     <ThemeProvider theme={theme}>
-      <ExpansionPanel className={classes.expand_panel} onChange={handleExpand}>
-        <ExpansionPanelSummary className={classes.expand_summary}>
-          <article className={classes.meal}>
-            {image.length > 0 ? (
-              <img src={image[0].image_url} className={classes.image} />
-            ) : (
-              <img className={classes.image} />
-            )}
-
-            <div className={classes.title}>
-              <Typography variant="h5">
-                <Link
-                  component={RouterLink}
-                  to={"/meals/" + id}
-                  color="inherit"
-                  className="btn custom-button"
-                >
-                  {title}
-                </Link>
-              </Typography>
-              <Typography variant="subtitle2">Submitted By {user}</Typography>
-            </div>
-            <Typography variant="body2" className={classes.description}>
-              {description}
-            </Typography>
-            <div className={classes.stats}>
-              <Typography variant="body2" className={classes.calories}>
-                Calories: {calories}
-              </Typography>
-              <Typography variant="body2" className={classes.score}>
-                <span>Score: {score}</span>
-              </Typography>
-
-              <Typography variant="body2" className={classes.tags}>
-                {tags.map((tag) => (
-                  <Chip label={tag.category} />
-                ))}
-              </Typography>
-            </div>
-            <IconButton
-              aria-label="favorite"
-              className={classes.favorite}
-              onClick={() => favItem()}
+      <Card variant="outlined" className={classes.meal}>
+        <CardMedia
+          className={classes.image}
+          image={image.length > 0 ? image[0].image_url : "/default-meal.png"}
+          title={title}
+        />
+        <CardHeader
+          className={classes.title}
+          title={
+            <Link
+              component={RouterLink}
+              to={"/meals/" + id}
+              color="inherit"
+              className="btn custom-button"
             >
-              {is_favorited ? <Favorite /> : <FavoriteBorder />}
-            </IconButton>
-          </article>
-        </ExpansionPanelSummary>
-        <ExpansionPanelDetails>
-          {/* {expanded ? () => renderIngredients() : null} */}
-          {expanded && (
-            <Details
-              className={classes.ingredients}
-              props={props}
-              state={state}
-            />
-          )}
-        </ExpansionPanelDetails>
-      </ExpansionPanel>
+              {title}
+            </Link>
+          }
+          subheader={`Submitted By ${user}`}
+        />
+        <CardContent className={classes.content}>
+          <Typography variant="body2" className={classes.description}>
+            {description}
+          </Typography>
+
+          <Typography variant="body2" className={classes.calories}>
+            Calories: {calories}
+          </Typography>
+          <Typography variant="body2" className={classes.score}>
+            <span>Score: {score}</span>
+          </Typography>
+
+          <Typography variant="body2" className={classes.tags}>
+            {tags.map((tag) => (
+              <Chip label={tag.category} />
+            ))}
+          </Typography>
+        </CardContent>
+        <CardActions className={classes.share}>
+          <IconButton
+            aria-label="favorite"
+            className={classes.favorite}
+            onClick={() => favItem()}
+          >
+            {is_favorited ? <Favorite /> : <FavoriteBorder />}
+          </IconButton>
+          <IconButton aria-label="share">
+            <Share />
+          </IconButton>
+          <IconButton
+            className={clsx(classes.expandIcon, {
+              [classes.expandOpen]: expanded,
+            })}
+            onClick={handleExpandClick}
+            aria-expanded={expanded}
+            aria-label="show more"
+          >
+            <ExpandMore />
+          </IconButton>
+        </CardActions>
+        <Collapse className={classes.collapse} in={expanded} timeout="auto">
+          <CardContent>
+            {expanded && (
+              <Details
+                className={classes.ingredients}
+                props={props}
+                state={state}
+              />
+            )}
+          </CardContent>
+        </Collapse>
+      </Card>
     </ThemeProvider>
   );
 }
