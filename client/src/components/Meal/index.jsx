@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import {
-  Container,
   Typography,
   IconButton,
   Chip,
   Link,
-  ExpansionPanel,
-  ExpansionPanelSummary,
-  ExpansionPanelDetails,
   Card,
   CardHeader,
   CardMedia,
@@ -38,8 +34,12 @@ const useStyles = makeStyles(() => ({
       '"image title" "image content" "image share" "collapse collapse"',
     gridTemplateColumns: "20em auto",
     gridTemplateRows: "6em auto auto auto",
-    gridGap: "1em",
     width: "100%",
+    margin: "1em",
+    boxShadow: theme.shadows[2],
+    "&:hover": {
+      boxShadow: theme.shadows[10],
+    },
   },
   title: {
     gridArea: "title",
@@ -114,14 +114,6 @@ export default function Meal(props) {
   }, []);
 
   const [expanded, setExpanded] = useState(props.props.is_expanded || false);
-  // const [expanded, setExpanded] = useState(false);
-
-  useEffect(() => {
-    if (expanded) {
-      // renderIngredients
-    } else {
-    }
-  }, [expanded]);
 
   const favItem = () => {
     // const newFavState = is_favorited
@@ -129,13 +121,6 @@ export default function Meal(props) {
       return { ...prev, is_favorited: is_favorited ? false : true };
     });
   };
-
-  // const handleExpand = (e, is_expanded) => {
-  //   console.log("handleexpanded", e);
-  //   console.log("is_expanded", is_expanded);
-
-  //   setExpanded(is_expanded);
-  // };
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
