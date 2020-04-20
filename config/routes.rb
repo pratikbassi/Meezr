@@ -25,7 +25,6 @@ Rails.application.routes.draw do
     namespace :ingredients do
       post 'parse', to: 'parse#index'
     end
-
   end
 
   get '*path', to: "static_pages#fallback_index_html", constraints: ->(request) do
