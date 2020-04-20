@@ -7,6 +7,8 @@ class Api::SessionsController < ApplicationController
 
     if user && user['user_password'] == params[:user_password]
       render :json => { user_id: user['id'] }
+    else
+      render :json => { message: "403 Forbidden"}, :status => 403
     end
     
   end
