@@ -16,12 +16,9 @@ Rails.application.routes.draw do
     get '/data', to: 'tests#index'
     post  '/login' ,to: 'sessions#create'
     get '/logout'  ,to: 'sessions#destroy'
-<<<<<<< HEAD
     
     resources :favorites
-=======
     get "search/:query" =>  "meals#search"
->>>>>>> e09e7b8fce78fc51f837719ea875d6d9153322f2
     resources :dogs
     resources :users
     resources :meals

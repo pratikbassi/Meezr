@@ -1,6 +1,11 @@
 class Api::FavoritesController < ApplicationController
+  def new
+    @user = request.cookies["user_id"]
+    
+  end 
+
   def index
-    render json: Favorite.includes([:user, :meal]).limit(1000), include: [:user => {:only => :user_name}]
+    render json: Favorite.includes([:user, :meal]).limit(1000), include: [:meal, :user => {:only => :user_name}]
   end
 
   def show
@@ -9,13 +14,15 @@ class Api::FavoritesController < ApplicationController
   end
 
   def create
-    # if Favorite.create(favorited: @meal, user: '900')
-    #   redirect_to @meal, notice: 'Project has been favorited'
+    Favorite.create(:id => 100, :meal_id => 666 , :user_id => 100)
+   
+      render :json => { message: 'Favorite has been added'}
     # else
-    #   redirect_to @meal, alert: 'Something went wrong...*sad panda*'
+    #   render :json => { message: "Something went wrong"}
     # end
-    favorite = Favorite.create(id: 999, meal: @meal)
-    render :json => { message: "Hit Create Entry" }
+    # favorite = Favorite.create(id: @user, meal: @meal)
+    # render :json => { message: "Hit Create Entry" }
+
   end
 
   def destroy
