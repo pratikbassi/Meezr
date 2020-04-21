@@ -18,14 +18,42 @@ export default function NewMeal() {
     size: "Medium",
     type: "Breakfast",
     calorieGoal: 500,
-    ingredients: {
-      butter: 1,
-      butterscotch: 3,
-    },
+    ingredients: {},
     title: "Default Title",
     description: "Default Description",
-    image_url: "https://i.redd.it/ewwlx46f7es41.jpg",
+    image_url: [],
+    is_public: false,
   });
+  console.log("state", state);
+  /**
+    {
+        "id": 2,
+        "user_id": 37,
+        "is_public": true,
+        "is_deleted": false,
+        "title": "Bok Choy - Baby",
+        "desc": "Bar Bran Honey NutBar Bran Honey NutBar Bran Honey NutBar Bran Honey NutBar Bran Honey Nut",
+        "created_at": "2020-04-19T04:41:14.625Z",
+        "updated_at": "2020-04-19T04:41:14.625Z",
+        "meal_photos": [
+            {
+                "id": 86,
+                "image_url": "http://dummyimage.com/318x753.jpg/cc0000/ffffff",
+                "meal_id": 2,
+                "created_at": "2020-04-19T04:43:23.752Z",
+                "updated_at": "2020-04-19T04:43:23.752Z"
+            }
+        ],
+        "meal_ingredients": [
+        ],
+        "meal_categories": [],
+        "user": {
+            "user_name": "Kerrill Binfield"
+        }
+    }
+  */
+
+  const [submitMsg, setSubmitMsg] = useState("");
 
   const [currentStep, setCurrentStep] = useState(1);
   // console.log("currentStep", currentStep);
@@ -49,16 +77,18 @@ export default function NewMeal() {
       .post("/api/meals", state)
       .then(function (response) {
         console.log(response);
+        setSubmitMsg(response.data.message);
       })
       .catch(function (error) {
         console.log(error);
+        setSubmitMsg(error.data.message);
       });
   };
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    // console.log("Input Change!");
-    // console.log(event);
+    console.log("Input Change!");
+    console.log(event.target);
     const newValue = {
       [name]: value,
     };
@@ -72,12 +102,22 @@ export default function NewMeal() {
         newValue.calorieGoal = 800;
       }
     }
-    // console.log("newValue", newValue);
+    console.log("newValue", newValue);
     setState((prev) => ({ ...prev, ...newValue }));
   };
 
-  const handleAdd = (event) => {
+  const handleBoolChange = (event) => {
     const { name, value } = event.target;
+    console.log("Input Bool Change!");
+    console.log(event.target);
+    const newValue = {
+      [name]: value === "true" ? true : false,
+    };
+    setState((prev) => ({ ...prev, ...newValue }));
+  };
+
+  const handleAdd = (obj) => {
+    const { name, image } = obj;
     // console.log("Input Add!");
     // console.log(event);
     // console.log(state);
@@ -85,40 +125,29 @@ export default function NewMeal() {
       return {
         ...prev,
         ingredients: {
-          ...prev[name],
-          [value]: 1,
+          ...prev.ingredients,
+          [name]: {
+            ...obj,
+            servings: 1,
+          },
         },
       };
     });
   };
 
-  const handleQuantityAdd = (name) => {
+  const handleQuantityChange = (ingredient, incrementer) => {
     // console.log("Input Modify Add!");
-    // console.log("name", name);
-
+    // console.log("ingredient", ingredient);
     setState((prev) => {
       // console.log("prev", prev);
       return {
         ...prev,
         ingredients: {
           ...prev.ingredients,
-          [name]: prev.ingredients[name] + 1,
-        },
-      };
-    });
-  };
-
-  const handleQuantityDecrease = (name) => {
-    // console.log("Input Modify Decrease!");
-    // console.log("name", name);
-
-    setState((prev) => {
-      // console.log("prev", prev);
-      return {
-        ...prev,
-        ingredients: {
-          ...prev.ingredients,
-          [name]: prev.ingredients[name] - 1,
+          [ingredient.name]: {
+            ...prev.ingredients[ingredient.name],
+            servings: prev.ingredients[ingredient.name].servings + incrementer,
+          },
         },
       };
     });
@@ -138,12 +167,17 @@ export default function NewMeal() {
             <Page2
               state={state}
               onAdd={handleAdd}
-              onQuantityAdd={handleQuantityAdd}
-              onQuantityDecrease={handleQuantityDecrease}
+              onQuantityChange={handleQuantityChange}
             />
           )}
           {currentStep === 3 && <Page3 state={state} />}
-          {currentStep === 4 && <Page4 state={state} onChange={handleChange} />}
+          {currentStep === 4 && (
+            <Page4
+              state={state}
+              onChange={handleChange}
+              onBoolChange={handleBoolChange}
+            />
+          )}
 
           {/* Check and render appropiate buttons */}
           {currentStep === 1 && <Button onClick={_next}> Next </Button>}
@@ -159,6 +193,7 @@ export default function NewMeal() {
               <Button onClick={handleSubmit}> Submit </Button>
             </>
           )}
+          <Typography variant="button">{submitMsg}</Typography>
         </form>
       </Container>
     </>
