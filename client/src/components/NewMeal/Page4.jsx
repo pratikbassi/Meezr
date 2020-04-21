@@ -1,12 +1,9 @@
-import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
-  Container,
   Typography,
   TextField,
   Button,
-  FormGroup,
   FormControl,
   FormLabel,
   FormControlLabel,
@@ -81,12 +78,23 @@ export default function Page4(props) {
   "is_favorited": false
 }
    */
+  const [newImage, setNewImage] = useState("");
+  const [newImageArr, setNewImageArr] = useState([]);
 
-  const addImage = (e) => {
-    console.log(e);
-    console.log(e.target);
-    console.log(e.currentTarget);
+  const handleImageChange = (event) => {
+    console.log(event.target);
+    const { name, value } = event.target;
+    setNewImage(value);
   };
+
+  useEffect(() => {
+    onChange({
+      target: {
+        name: "image_url",
+        value: newImageArr,
+      },
+    });
+  }, [newImageArr]);
 
   useEffect(() => {
     renderMealPreview();
@@ -112,16 +120,22 @@ export default function Page4(props) {
         onChange={onChange}
       />
       <br />
-      <FormGroup onSubmit={addImage} preventDefault>
-        <TextField
-          name="image_url"
-          id="new-meal-image-url"
-          label="Image URL"
-          value={image_url}
-          onChange={onChange}
-        />
-        <Button type="submit">Add Image URL</Button>
-      </FormGroup>
+      <TextField
+        name="image_url"
+        id="new-meal-image-url"
+        label="Image URL"
+        value={newImage}
+        onChange={handleImageChange}
+      />
+      <Button
+        onClick={(event) => {
+          setNewImageArr((prev) => [...prev, event.currentTarget.value]);
+          setNewImage("");
+        }}
+        value={newImage}
+      >
+        Add Image URL
+      </Button>
       <FormControl component="fieldset">
         <FormLabel component="legend">Meal Privacy Setting</FormLabel>
         <RadioGroup

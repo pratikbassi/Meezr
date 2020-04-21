@@ -24,7 +24,7 @@ export default function NewMeal() {
     },
     title: "Default Title",
     description: "Default Description",
-    image_url: "https://i.redd.it/ewwlx46f7es41.jpg",
+    image_url: [],
     is_public: false,
   });
   console.log("state", state);
