@@ -36,6 +36,14 @@ class Api::MealsController < ApplicationController
         serving_size: ingredient[1]
       )
     end
+    MealCategory.create(
+      meal_id: newMeal['id'],
+      category: data['size']
+    )
+    MealCategory.create(
+      meal_id: newMeal['id'],
+      category: data['type']
+    )
     if Meal.exists?(newMeal.id) && MealIngredient.exists?(newMeal.id)
       render :json => { message: "Successfully Created Entry" }
     else
