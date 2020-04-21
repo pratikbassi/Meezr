@@ -68,8 +68,8 @@ export default function Profile(props) {
     <div className={classes.root}>
       <AppBar position="static">
         <Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
-          <Tab label="Favorites" {...a11yProps(0)} />
-          <Tab label="Your Posts" {...a11yProps(1)} />
+          <Tab label="Your meals" {...a11yProps(0)} />
+          <Tab label="Favorites" {...a11yProps(1)} />
           <Tab label="Your Info" {...a11yProps(2)} />
         </Tabs>
       </AppBar>

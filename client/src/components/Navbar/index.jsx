@@ -181,6 +181,15 @@ export default function Navbar(props) {
     }
   };
 
+  React.useEffect(() => {
+    if(Cookies.get("user_id")){
+      getMealsForUser(Cookies.get("user_id"))
+    }
+  }, 
+  []
+  )
+
+
   const CheckAuth = () => {
     if (auth) {
       return (
@@ -234,6 +243,8 @@ export default function Navbar(props) {
             buttonType={button}
             registerUser={registerUser}
             loginUser={loginUser}
+            profileData={state}
+
           />
         </div>
       );
