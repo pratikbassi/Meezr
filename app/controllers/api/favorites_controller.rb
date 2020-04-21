@@ -1,3 +1,4 @@
+include ActionController::Cookies
 class Api::FavoritesController < ApplicationController
   def new
   end 
@@ -13,10 +14,9 @@ class Api::FavoritesController < ApplicationController
   end
 
   def create
-    
-    userID = request.cookies["user_id"]
-    pp userID
-    Favorite.create(:meal_id => 84 , :user_id => userID)
+    user = session[:user_id]
+    # pp user
+    Favorite.create(meal_id: params[:id], user_id: user)
   
     render :json => { message: 'Favorite has been added'}
     # else0

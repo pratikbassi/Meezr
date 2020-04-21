@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
+import Cookies from "js-cookie";
 // import './App.css';
 
 class App extends Component {
@@ -68,7 +69,15 @@ class App extends Component {
   //Test favorite function
   fetchData4 = () => {
     axios
-    .get("/api/favorite")
+    .post("/api/favorites/:id")
+    .then((response) => {
+      console.log(response.data);
+    });
+  };
+
+  fetchDataGetFav = () => {
+    axios
+    .get("/api/favorites")
     .then((response) => {
       console.log(response.data);
     });
@@ -82,6 +91,7 @@ class App extends Component {
         <button onClick={this.fetchData2}>Fetch Data2</button>
         <button onClick={this.fetchData3}>Fetch Data3</button>
         <button onClick={this.fetchData4}>Fetch Data4</button>
+        <button onClick={this.fetchDataGetFav}>fetchDataGetFav</button>
         <h1>{this.state.message2}</h1>
       </div>
     );
