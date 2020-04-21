@@ -25,7 +25,11 @@ export default function NewMeal() {
     title: "Default Title",
     description: "Default Description",
     image_url: "https://i.redd.it/ewwlx46f7es41.jpg",
+    is_public: false,
   });
+  console.log("state", state);
+
+  const [submitMsg, setSubmitMsg] = useState("");
 
   const [currentStep, setCurrentStep] = useState(1);
   // console.log("currentStep", currentStep);
@@ -49,16 +53,18 @@ export default function NewMeal() {
       .post("/api/meals", state)
       .then(function (response) {
         console.log(response);
+        setSubmitMsg(response.data.message);
       })
       .catch(function (error) {
         console.log(error);
+        setSubmitMsg(error.data.message);
       });
   };
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    // console.log("Input Change!");
-    // console.log(event);
+    console.log("Input Change!");
+    console.log(event.target);
     const newValue = {
       [name]: value,
     };
@@ -72,7 +78,17 @@ export default function NewMeal() {
         newValue.calorieGoal = 800;
       }
     }
-    // console.log("newValue", newValue);
+    console.log("newValue", newValue);
+    setState((prev) => ({ ...prev, ...newValue }));
+  };
+
+  const handleBoolChange = (event) => {
+    const { name, value } = event.target;
+    console.log("Input Bool Change!");
+    console.log(event.target);
+    const newValue = {
+      [name]: value === "true" ? true : false,
+    };
     setState((prev) => ({ ...prev, ...newValue }));
   };
 
@@ -143,7 +159,13 @@ export default function NewMeal() {
             />
           )}
           {currentStep === 3 && <Page3 state={state} />}
-          {currentStep === 4 && <Page4 state={state} onChange={handleChange} />}
+          {currentStep === 4 && (
+            <Page4
+              state={state}
+              onChange={handleChange}
+              onBoolChange={handleBoolChange}
+            />
+          )}
 
           {/* Check and render appropiate buttons */}
           {currentStep === 1 && <Button onClick={_next}> Next </Button>}
@@ -159,6 +181,7 @@ export default function NewMeal() {
               <Button onClick={handleSubmit}> Submit </Button>
             </>
           )}
+          <Typography variant="button">{submitMsg}</Typography>
         </form>
       </Container>
     </>

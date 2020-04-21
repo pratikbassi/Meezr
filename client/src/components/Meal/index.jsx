@@ -100,18 +100,15 @@ export default function Meal(props) {
     title,
     description,
     user,
-    ingredients,
     tags,
     calories,
     score,
-    prepTime,
-    cost,
     is_favorited,
   } = state;
 
   useEffect(() => {
     setState(props.props);
-  }, []);
+  }, [props.props]);
 
   const [expanded, setExpanded] = useState(props.props.is_expanded || false);
 
