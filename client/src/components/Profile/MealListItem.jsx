@@ -1,34 +1,50 @@
 import React from "react";
+import { makeStyles } from '@material-ui/core/styles';
+import Card from '@material-ui/core/Card';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
+import Button from '@material-ui/core/Button';
+import { Link, Typography } from "@material-ui/core";
 
-import { ThemeProvider } from "@material-ui/core/styles";
-import theme from "theme";
-import { Link, ListItem, Grid, ButtonBase, Typography } from "@material-ui/core";
+const useStyles = makeStyles({
+  root: {
+    maxWidth: 345,
+    minHeight: 100
+  },
+});
+
 
 export default function MealListItem(props) {
-  let mealPhoto = props.mealPhoto
-  let mealTitle = props.mealTitle
-  let mealId = props.mealId
-
+  const classes = useStyles();
+  console.log(props)
   return (
-    <div id={mealId}>
-      <ListItem>
-        <ThemeProvider theme={theme}>
-          <Grid container direction="row" justify="space-evenly" alignItems="center">
-            <ButtonBase>
-              <Link to={`/meals/${mealId}`}>
-                <Grid item m>
-                    <img alt="MealPhoto" src={mealPhoto}/>
-                </Grid>
-                <Grid item m>
-                  <Typography  variant="h5">
-                    {mealTitle}
-                  </Typography>
-                </Grid>
-              </Link>
-            </ButtonBase>
-          </Grid>
-        </ThemeProvider>
-      </ListItem>
-    </div>
-  )
+    <Card className={classes.root}>
+      <CardActionArea>
+        <CardMedia
+          component="img"
+          alt="Food goes here!"
+          height="140"
+          image={props.image_url}
+          title={props.title}
+        />
+        <CardContent>
+          <Typography gutterBottom variant="h5" component="h2">
+            {props.title}
+          </Typography>
+          <Typography variant="body2" color="textSecondary" component="p">
+            {props.category}
+          </Typography>
+        </CardContent>
+      </CardActionArea>
+      <CardActions>
+        <Button size="small" color="primary">
+          <Link to={`/meals/${props.id}`}>View!</Link>
+        </Button>
+      </CardActions>
+    </Card>
+  );
+
 }
+
