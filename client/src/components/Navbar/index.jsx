@@ -93,6 +93,7 @@ export default function Navbar(props) {
   const [auth, setAuth] = React.useState(Cookies.get("user_id") || null);
   const [popup, setPopup] = React.useState(props.popup || false);
   const [button, setButton] = React.useState(null);
+  const [state, setState] = React.useState(null)
 
   const handleClickOpen = (buttonType) => {
     setButton(buttonType);
@@ -104,9 +105,25 @@ export default function Navbar(props) {
     setButton(null);
   };
 
+
+  const getMealsForUser = (user) => {
+    return Promise.resolve(axios({
+      method: "get",
+      url: `/api/users/${user}`,
+    }).then((res) => {
+      setState(res.data);})
+    )
+  }
+
+
   const logout = () => {
     Cookies.remove("user_id");
-    setAuth(null);
+    handleClose()
+    setAuth(null)
+    return Promise.resolve(axios({
+      method: "get",
+      url: "/api/logout"
+    }).catch(err => {console.log(err)}))
   };
 
   const setCookie = (cookieID) => {
@@ -130,6 +147,7 @@ export default function Navbar(props) {
             handleClose();
             setCookie(res.data["user_id"]);
             setAuth(Cookies.get("user_id"));
+            getMealsForUser(Cookies.get("user_id"))
           })
           .catch((err) => {
             console.log(err);
@@ -154,6 +172,7 @@ export default function Navbar(props) {
             handleClose();
             setCookie(res.data["user_id"]);
             setAuth(Cookies.get("user_id"));
+            getMealsForUser(Cookies.get("user_id"))
           })
           .catch((err) => {
             console.log(err);
@@ -172,12 +191,22 @@ export default function Navbar(props) {
             aria-controls={menuId}
             aria-haspopup="true"
             color="inherit"
+            onClick={() => handleClickOpen('profile')}
           >
             <AccountCircle />
           </IconButton>
           <Button onClick={() => logout()} color="inherit">
             Logout
           </Button>
+          <RenderAuth
+            onClose={handleClose}
+            open={popup}
+            buttonType={button}
+            registerUser={registerUser}
+            loginUser={loginUser}
+            profileData={state}
+
+          />
         </div>
       );
     } else {
@@ -211,9 +240,7 @@ export default function Navbar(props) {
     }
   };
 
-  React.useEffect(() => {
-    CheckAuth();
-  }, [auth]);
+
 
   const menuId = "primary-search-account-menu";
   const renderMenu = (

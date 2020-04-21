@@ -24,6 +24,7 @@ Rails.application.routes.draw do
     resources :meals
     namespace :ingredients do
       post 'parse', to: 'parse#index'
+      resources :autocomplete
     end
   end
 

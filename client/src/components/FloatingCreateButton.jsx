@@ -1,6 +1,5 @@
 import React from "react";
-
-import { Fab } from "@material-ui/core";
+import { Fab, Tooltip } from "@material-ui/core";
 import { Add } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom";
@@ -19,8 +18,15 @@ export default function FloatingCreateButton(props) {
   let history = useHistory();
 
   return (
-    <Fab color="primary" aria-label="Add" className={classes.fabNew}>
-      <Add onClick={() => history.push(`/create`)} />
-    </Fab>
+    <Tooltip title="Create a new meal">
+      <Fab
+        color="primary"
+        aria-label="Add"
+        className={classes.fabNew}
+        onClick={() => history.push(`/create`)}
+      >
+        <Add />
+      </Fab>
+    </Tooltip>
   );
 }

@@ -1,114 +1,162 @@
-import React from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
-  Container,
-  FormControl,
-  InputLabel,
-  Input,
-  FormHelperText,
-  Select,
-  MenuItem,
   TextField,
   Button,
+  Card,
+  CardMedia,
+  CardContent,
+  Typography,
+  CardActions,
+  CircularProgress,
 } from "@material-ui/core";
+import { Autocomplete } from "@material-ui/lab";
 import { Add, Remove } from "@material-ui/icons";
 
-const useStyles = makeStyles({});
+import { useDebounce } from "use-debounce";
+import axios from "axios";
+
+const useStyles = makeStyles({
+  page2: {
+    display: "grid",
+    gridTemplateColumns: "3fr 1fr",
+    gridTemplateRows: "6em 1fr",
+    gridTemplateAreas: '"search summary" "list summary"',
+    width: "100%",
+    height: "100%",
+  },
+  search: {
+    gridArea: "search",
+  },
+  list: {
+    gridArea: "list",
+    display: "grid",
+    gridTemplateColumns: "1fr",
+    gridTemplateRows: "auto",
+  },
+  summary: {
+    gridArea: "summary",
+  },
+  ingredientCard: {
+    display: "grid",
+    gridTemplateColumns: "auto 1fr auto",
+    gridTemplateRows: "1fr",
+    gridTemplateAreas: '"image name servings"',
+    alignItems: "center",
+  },
+  image: {
+    gridArea: "image",
+    height: "100px",
+    width: "100px",
+    backgroundSize: "contain",
+  },
+  name: {
+    gridArea: "name",
+  },
+  servings: {
+    gridArea: "servings",
+    justifySelf: "end",
+  },
+});
 
 export default function Page2(props) {
   const classes = useStyles();
-  const { state, onAdd, onQuantityAdd, onQuantityDecrease } = props;
+  const { state, onAdd, onQuantityChange } = props;
 
-  const createAutocompleteEntries = () => {
-    let autocompletedata = [
-      {
-        name: "butter",
-        image: "butter-sliced.jpg",
-      },
-      {
-        name: "buttermilk",
-        image: "buttermilk.jpg",
-      },
-      {
-        name: "butterscotch",
-        image: "caramel-sauce.jpg",
-      },
-      {
-        name: "butter beans",
-        image: "dry-cannellini-beans.jpg",
-      },
-      {
-        name: "butter lettuce",
-        image: "Butter-or-Boston-Bibb-lettuce.jpg",
-      },
-      {
-        name: "butternut squash",
-        image: "butternut-squash.jpg",
-      },
-      {
-        name: "butterscotch chips",
-        image: "peanut-butter-or-butterscotch-chips.jpg",
-      },
-      {
-        name: "butter crackers",
-        image: "crackers.jpg",
-      },
-      {
-        name: "buttermilk biscuits",
-        image: "buttermilk-biscuits.jpg",
-      },
-      {
-        name: "butterfinger",
-        image: "butterfinger.png",
-      },
-    ];
-    const output = autocompletedata.map((entry) => (
-      <MenuItem value={entry.name}>{entry.name}</MenuItem>
-    ));
-    return output;
-  };
+  const [searchValue, setSearchValue] = useState("");
+  const [debouncedSearchValue] = useDebounce(searchValue, 1000);
+  const [open, setOpen] = useState(false);
+  const [options, setOptions] = useState([]);
+  const loading = open && options.length === 0;
 
   const createAddedIngredients = () => {
-    const ingredients = state.ingredients;
-    const output = [];
-    for (const ingredient in ingredients) {
-      if (ingredients.hasOwnProperty(ingredient)) {
-        if (ingredients[ingredient] > 0) {
-          output.push(
-            <div>
-              <Button onClick={() => onQuantityDecrease(ingredient)}>
-                <Remove />
-              </Button>
-              <span>{ingredients[ingredient]}</span>
-              <Button onClick={() => onQuantityAdd(ingredient)}>
-                <Add />
-              </Button>
-              <span>of {ingredient}</span>
-            </div>
-          );
-        }
-      }
-    }
-    console.log("outputting ingredients added", output);
-    return output;
+    const ingredients = Object.values(state.ingredients);
+    console.log("object Values: ", ingredients);
+    return ingredients.map((ingredient) => (
+      <Card key={ingredient.id} className={classes.ingredientCard}>
+        <CardMedia
+          className={classes.image}
+          image={`https://spoonacular.com/cdn/ingredients_100x100/${ingredient.image}`}
+          title={ingredient.name}
+        />
+        <CardContent className={classes.name}>
+          <Typography gutterBottom variant="h5" component="h2">
+            {ingredient.name}
+          </Typography>
+        </CardContent>
+        <CardActions className={classes.servings}>
+          <Button onClick={() => onQuantityChange(ingredient, -1)}>
+            <Remove />
+          </Button>
+          <span>{ingredient.servings}</span>
+          <Button onClick={() => onQuantityChange(ingredient, 1)}>
+            <Add />
+          </Button>
+        </CardActions>
+      </Card>
+    ));
   };
 
+  useEffect(() => {
+    if (debouncedSearchValue != "") {
+      console.log("search call updated!");
+      axios
+        .get("/api/ingredients/autocomplete", {
+          params: {
+            query: debouncedSearchValue,
+          },
+        })
+        .then((res) => setOptions(res.data));
+    }
+  }, [debouncedSearchValue]);
+
+  useEffect(() => {
+    if (!open) {
+      setOptions([]);
+    }
+  }, [open]);
+
   return (
-    <section>
-      <FormControl>
-        <InputLabel id="new-ingredient">Ingredient Search</InputLabel>
-        <Select
-          name="ingredients"
-          labelId="new-ingredient"
-          id="new-ingredient"
-          value={state.type}
-          onChange={onAdd}
-        >
-          {createAutocompleteEntries()}
-        </Select>
-      </FormControl>
-      <br />
-      {createAddedIngredients()}
+    <section className={classes.page2}>
+      <Autocomplete
+        onChange={(event, value) => {
+          if (value) {
+            return onAdd(value);
+          }
+        }}
+        id="asynchronous-demo"
+        open={open}
+        onOpen={() => {
+          setOpen(true);
+        }}
+        onClose={() => {
+          setOpen(false);
+        }}
+        getOptionSelected={(option, value) => option.name === value.name}
+        getOptionLabel={(option) => option.name}
+        options={options}
+        loading={loading}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            label="Select Ingredient"
+            variant="outlined"
+            onChange={(event) => setSearchValue(event.target.value)}
+            InputProps={{
+              ...params.InputProps,
+              endAdornment: (
+                <React.Fragment>
+                  {loading ? (
+                    <CircularProgress color="inherit" size={20} />
+                  ) : null}
+                  {params.InputProps.endAdornment}
+                </React.Fragment>
+              ),
+            }}
+          />
+        )}
+      />
+      <div className={classes.list}>{createAddedIngredients()}</div>
     </section>
   );
 }

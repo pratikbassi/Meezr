@@ -3,13 +3,32 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Container, Typography, Button } from "@material-ui/core";
 import {} from "@material-ui/icons";
 import axios from "axios";
+import { ThemeProvider } from "@material-ui/core/styles";
+import theme from "theme";
 
 import Page1 from "./Page1";
 import Page2 from "./Page2";
 import Page3 from "./Page3";
 import Page4 from "./Page4";
 
-const useStyles = makeStyles({});
+const useStyles = makeStyles({
+  create_meal: {
+    boxShadow: theme.shadows[4],
+  },
+  currentStep: {},
+  form: {
+    display: "flex",
+    flexDirection: "column",
+    alignContent: "space-between",
+  },
+  formSteps: {
+    minHeight: "50vh",
+  },
+  stepButtons: {
+    display: "flex",
+    alignContent: "space-between",
+  },
+});
 
 export default function NewMeal() {
   const classes = useStyles();
@@ -18,14 +37,42 @@ export default function NewMeal() {
     size: "Medium",
     type: "Breakfast",
     calorieGoal: 500,
-    ingredients: {
-      butter: 1,
-      butterscotch: 3,
-    },
-    title: "Default Title",
-    description: "Default Description",
-    image_url: "https://i.redd.it/ewwlx46f7es41.jpg",
+    ingredients: {},
+    title: "",
+    description: "",
+    image_url: [],
+    is_public: false,
   });
+  console.log("state", state);
+  /**
+    {
+        "id": 2,
+        "user_id": 37,
+        "is_public": true,
+        "is_deleted": false,
+        "title": "Bok Choy - Baby",
+        "desc": "Bar Bran Honey NutBar Bran Honey NutBar Bran Honey NutBar Bran Honey NutBar Bran Honey Nut",
+        "created_at": "2020-04-19T04:41:14.625Z",
+        "updated_at": "2020-04-19T04:41:14.625Z",
+        "meal_photos": [
+            {
+                "id": 86,
+                "image_url": "http://dummyimage.com/318x753.jpg/cc0000/ffffff",
+                "meal_id": 2,
+                "created_at": "2020-04-19T04:43:23.752Z",
+                "updated_at": "2020-04-19T04:43:23.752Z"
+            }
+        ],
+        "meal_ingredients": [
+        ],
+        "meal_categories": [],
+        "user": {
+            "user_name": "Kerrill Binfield"
+        }
+    }
+  */
+
+  const [submitMsg, setSubmitMsg] = useState("");
 
   const [currentStep, setCurrentStep] = useState(1);
   // console.log("currentStep", currentStep);
@@ -49,16 +96,18 @@ export default function NewMeal() {
       .post("/api/meals", state)
       .then(function (response) {
         console.log(response);
+        setSubmitMsg(response.data.message);
       })
       .catch(function (error) {
         console.log(error);
+        setSubmitMsg(error.data.message);
       });
   };
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    // console.log("Input Change!");
-    // console.log(event);
+    console.log("Input Change!");
+    console.log(event.target);
     const newValue = {
       [name]: value,
     };
@@ -72,12 +121,22 @@ export default function NewMeal() {
         newValue.calorieGoal = 800;
       }
     }
-    // console.log("newValue", newValue);
+    console.log("newValue", newValue);
     setState((prev) => ({ ...prev, ...newValue }));
   };
 
-  const handleAdd = (event) => {
+  const handleBoolChange = (event) => {
     const { name, value } = event.target;
+    console.log("Input Bool Change!");
+    console.log(event.target);
+    const newValue = {
+      [name]: value === "true" ? true : false,
+    };
+    setState((prev) => ({ ...prev, ...newValue }));
+  };
+
+  const handleAdd = (obj) => {
+    const { name, image } = obj;
     // console.log("Input Add!");
     // console.log(event);
     // console.log(state);
@@ -85,82 +144,114 @@ export default function NewMeal() {
       return {
         ...prev,
         ingredients: {
-          ...prev[name],
-          [value]: 1,
+          ...prev.ingredients,
+          [name]: {
+            ...obj,
+            servings: 1,
+          },
         },
       };
     });
   };
 
-  const handleQuantityAdd = (name) => {
+  const handleQuantityChange = (ingredient, incrementer) => {
     // console.log("Input Modify Add!");
-    // console.log("name", name);
-
+    // console.log("ingredient", ingredient);
     setState((prev) => {
       // console.log("prev", prev);
       return {
         ...prev,
         ingredients: {
           ...prev.ingredients,
-          [name]: prev.ingredients[name] + 1,
+          [ingredient.name]: {
+            ...prev.ingredients[ingredient.name],
+            servings: prev.ingredients[ingredient.name].servings + incrementer,
+          },
         },
       };
     });
   };
 
-  const handleQuantityDecrease = (name) => {
-    // console.log("Input Modify Decrease!");
-    // console.log("name", name);
+  const [checked, setChecked] = React.useState(false);
 
-    setState((prev) => {
-      // console.log("prev", prev);
-      return {
-        ...prev,
-        ingredients: {
-          ...prev.ingredients,
-          [name]: prev.ingredients[name] - 1,
-        },
-      };
-    });
+  const handleTransition = () => {
+    setChecked((prev) => !prev);
   };
 
   return (
-    <>
-      <Container>
+    <ThemeProvider theme={theme}>
+      <Container className={classes.create_meal}>
         <Typography variant="h2" className={classes.root}>
           Create a New Meal
         </Typography>
-        <p>Step {currentStep} </p>
-        <form onSubmit={handleSubmit}>
-          {/* Check and render appropiate view */}
-          {currentStep === 1 && <Page1 state={state} onChange={handleChange} />}
-          {currentStep === 2 && (
-            <Page2
-              state={state}
-              onAdd={handleAdd}
-              onQuantityAdd={handleQuantityAdd}
-              onQuantityDecrease={handleQuantityDecrease}
-            />
-          )}
-          {currentStep === 3 && <Page3 state={state} />}
-          {currentStep === 4 && <Page4 state={state} onChange={handleChange} />}
+        <Typography variant="subtitle1" className={classes.currentStep}>
+          Step {currentStep}
+        </Typography>
+        <form onSubmit={handleSubmit} className={classes.form}>
+          <div className={classes.formSteps}>
+            {/* Check and render appropiate view */}
+            {currentStep === 1 && (
+              <Page1 state={state} onChange={handleChange} />
+            )}
+            {currentStep === 2 && (
+              <Page2
+                state={state}
+                onAdd={handleAdd}
+                onQuantityChange={handleQuantityChange}
+              />
+            )}
+            {currentStep === 3 && <Page3 state={state} />}
+            {currentStep === 4 && (
+              <Page4
+                state={state}
+                onChange={handleChange}
+                onBoolChange={handleBoolChange}
+              />
+            )}
+          </div>
 
-          {/* Check and render appropiate buttons */}
-          {currentStep === 1 && <Button onClick={_next}> Next </Button>}
-          {currentStep > 1 && currentStep < 4 && (
-            <>
-              <Button onClick={_back}> Back </Button>
-              <Button onClick={_next}> Next </Button>
-            </>
-          )}
-          {currentStep === 4 && (
-            <>
-              <Button onClick={_back}> Back </Button>
-              <Button onClick={handleSubmit}> Submit </Button>
-            </>
-          )}
+          <div className={classes.stepButtons}>
+            {/* Check and render appropiate buttons */}
+            {currentStep === 1 && (
+              <>
+                <Button disabled variant="outlined" onClick={_back}>
+                  Back
+                </Button>
+                <Button color="primary" onClick={_next}>
+                  Next
+                </Button>
+              </>
+            )}
+            {currentStep > 1 && currentStep < 4 && (
+              <>
+                <Button variant="outlined" onClick={_back}>
+                  Back
+                </Button>
+                <Button color="primary" onClick={_next}>
+                  Next
+                </Button>
+              </>
+            )}
+            {currentStep === 4 && (
+              <>
+                <Button variant="outlined" onClick={_back}>
+                  Back
+                </Button>
+                <Button color="primary" onClick={handleSubmit}>
+                  Submit
+                </Button>
+              </>
+            )}
+
+            {submitMsg && (
+              <>
+                <br />
+                <Typography variant="button">{submitMsg}</Typography>
+              </>
+            )}
+          </div>
         </form>
       </Container>
-    </>
+    </ThemeProvider>
   );
 }

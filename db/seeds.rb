@@ -744,7 +744,7 @@ puts("===Meals complete===")
 
 for i in 1..100 do
   Favorite.create(
-    user_id: rand(1..100),
+    user_id: i,
     meal_id: rand(1..100)
   )
 end
@@ -753,7 +753,7 @@ puts("===Favorites complete===")
 for i in 1..100 do
   MealPhoto.create(
     image_url: images[rand(99)],
-    meal_id: rand(1..100)
+    meal_id: i
   )
 end
 puts("===Meal photos complete===")
@@ -771,7 +771,7 @@ puts("=== mealingredients complete===")
 
 for i in 1..100 do
   MealCategory.create(
-    meal_id: rand(1..100),
+    meal_id: i,
     category: store_cats[rand(99)]
   )
 end
@@ -780,7 +780,7 @@ puts("=== mealcategories complete===")
 for i in 1..100 do
   UserPreference.create(
     user_id: rand(1..100),
-    meal_ingredient_id: rand(1..100),
+    meal_ingredient_id: i,
     is_disliked: bool_list.sample
   )
 end
