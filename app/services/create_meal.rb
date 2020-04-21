@@ -44,7 +44,8 @@ class CreateMeal
   end
 end
 
-#meal = CreateMeal.new('apples,flour,sugar')
+meal = CreateMeal.new('apples,flour,sugar')
+pp meal.create_meal
 
 
 

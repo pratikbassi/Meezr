@@ -37,5 +37,5 @@ class AutoCompleteRecipeSearch
   end
 end
 
-# autocomplete_info = AutoCompleteRecipeSearch.new('bro', 11)
-# pp autocomplete_info.get_ingredient_info
+autocomplete_info = AutoCompleteRecipeSearch.new('bro', 5)
+pp autocomplete_info.get_ingredient_info

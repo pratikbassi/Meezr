@@ -1,8 +1,8 @@
-require Rails.root.join('app', 'services', 'get_ingredient_info.rb')
+require Rails.root.join('app', 'services', 'get_meal_calories.rb')
 
-class Api::IngredientFinderController < ApplicationController
+class Api::GetMealCaloriesController < ApplicationController
   def index
-    @pineapple = IngredientsInfo.new('9266', 100)
-    render json: @pineapple.get_ingredient_info
+    @meal = GetMealCalories.new('1003464')
+    render json: @meal.get_meal_calories
   end
 end

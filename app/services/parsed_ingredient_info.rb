@@ -4,6 +4,7 @@ require 'dotenv'
 require "uri"
 Dotenv.load
 
+#Extract an ingredient from plain text.
 class ParsedIngredientInfo
 
   attr_accessor :ingredientList, :servings, :includeNutrition
@@ -51,5 +52,5 @@ class ParsedIngredientInfo
   end
 end
 
-# test = ParsedIngredientInfo.new(["3 oz pork shoulder", "banana"], 2)
-# pp test.parsed_ingredient_info
+test = ParsedIngredientInfo.new(["3 oz pork shoulder", "banana"], 2)
+pp test.parsed_ingredient_info

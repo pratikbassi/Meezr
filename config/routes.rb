@@ -1,5 +1,13 @@
 Rails.application.routes.draw do
 
+  # namespace :api do
+  #   get 'favorites/index'
+  #   get 'favorites/show'
+  #   get 'favorites/create'
+  #   get 'favorites/destroy'
+  #   get 'favorites/update'
+
+  # end
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   
   namespace :api do # /api/data
@@ -8,6 +16,8 @@ Rails.application.routes.draw do
     get '/data', to: 'tests#index'
     post  '/login' ,to: 'sessions#create'
     get '/logout'  ,to: 'sessions#destroy'
+    
+    resources :favorites
     get "search/:query" =>  "meals#search"
     resources :dogs
     resources :users

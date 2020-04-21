@@ -36,6 +36,6 @@ class GetMealCost
   end
 end
 
-# meal_cost = GetMealCost.new('1003464')
-# pp meal_cost.get_meal_calories
+meal_cost = GetMealCost.new('1003464')
+pp meal_cost.get_meal_calories
     
