@@ -27,6 +27,7 @@
   },
   "homepage": "https://github.com/NimaBoscarino/stigma#readme",
   "dependencies": {
-    "js-cookie": "^2.2.1"
+    "js-cookie": "^2.2.1",
+    "use-debounce": "^3.4.1"
   }
 }
