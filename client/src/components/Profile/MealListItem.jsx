@@ -40,7 +40,7 @@ export default function MealListItem(props) {
       </CardActionArea>
       <CardActions>
         <Button size="small" color="primary">
-          <Link to={`/meals/${props.id}`}>View!</Link>
+          <Link href={`/meals/${props.id}`}>View!</Link>
         </Button>
       </CardActions>
     </Card>

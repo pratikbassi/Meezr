@@ -8,7 +8,6 @@ import Box from '@material-ui/core/Box';
 import { makeStyles } from "@material-ui/styles";
 import MealList from "../Profile/MealList"
 
-<<<<<<< HEAD
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -54,24 +53,6 @@ const useStyles = makeStyles((theme) => ({
     justify: "center"
   }
 }));
-=======
-import MealList from "./MealList";
-
-const useStyles = makeStyles({});
-
-export default function Profile() {
-  const [state, useState] = React.useState();
-  const user = Cookies.get("user_id");
-
-  const getMealsForUser = (user) => {
-    return Promise.resolve(
-      axios({
-        method: "get",
-        url: `/api/users/${user}`,
-      })
-    );
-  };
->>>>>>> 85c7688f9a1dc32cfc83260f8a52cce3ed6e9420
 
 export default function Profile(props) {
   const classes = useStyles();
