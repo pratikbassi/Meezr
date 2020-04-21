@@ -9,15 +9,26 @@ import {
 } from "@material-ui/core";
 import {} from "@material-ui/icons";
 
-const useStyles = makeStyles({});
+const useStyles = makeStyles({
+  page1: {
+    display: "flex",
+    flexDirection: "column",
+    marginTop: "2em",
+  },
+  textFields: {
+    width: "15em",
+    maxWidth: "90vw",
+    marginBottom: "2em",
+  },
+});
 
 export default function Page2(props) {
   const classes = useStyles();
   const { state, onChange } = props;
 
   return (
-    <section>
-      <FormControl>
+    <section className={classes.page1}>
+      <FormControl className={classes.textFields}>
         <InputLabel id="new-meal-type">Meal Type</InputLabel>
         <Select
           name="type"
@@ -35,7 +46,7 @@ export default function Page2(props) {
         </Select>
       </FormControl>
       <br />
-      <FormControl>
+      <FormControl className={classes.textFields}>
         <InputLabel id="new-meal-size">Meal Size</InputLabel>
         <Select
           name="size"
@@ -51,6 +62,7 @@ export default function Page2(props) {
         </Select>
       </FormControl>
       <TextField
+        className={classes.textFields}
         id="standard-basic"
         label="Calorie Goal"
         name="calorieGoal"

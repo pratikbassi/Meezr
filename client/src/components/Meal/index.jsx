@@ -20,10 +20,8 @@ import {
   Share,
 } from "@material-ui/icons";
 import clsx from "clsx";
-import { Skeleton } from "@material-ui/lab";
 import { ThemeProvider } from "@material-ui/core/styles";
 import theme from "theme";
-// import "./styles.scss";
 
 import Details from "./Details";
 
