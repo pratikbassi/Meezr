@@ -18,10 +18,7 @@ export default function NewMeal() {
     size: "Medium",
     type: "Breakfast",
     calorieGoal: 500,
-    ingredients: {
-      butter: 1,
-      butterscotch: 3,
-    },
+    ingredients: {},
     title: "Default Title",
     description: "Default Description",
     image_url: [],
@@ -119,8 +116,8 @@ export default function NewMeal() {
     setState((prev) => ({ ...prev, ...newValue }));
   };
 
-  const handleAdd = (event) => {
-    const { name, value } = event.target;
+  const handleAdd = (obj) => {
+    const { name, image } = obj;
     // console.log("Input Add!");
     // console.log(event);
     // console.log(state);
@@ -128,40 +125,29 @@ export default function NewMeal() {
       return {
         ...prev,
         ingredients: {
-          ...prev[name],
-          [value]: 1,
+          ...prev.ingredients,
+          [name]: {
+            ...obj,
+            servings: 1,
+          },
         },
       };
     });
   };
 
-  const handleQuantityAdd = (name) => {
+  const handleQuantityChange = (ingredient, incrementer) => {
     // console.log("Input Modify Add!");
-    // console.log("name", name);
-
+    // console.log("ingredient", ingredient);
     setState((prev) => {
       // console.log("prev", prev);
       return {
         ...prev,
         ingredients: {
           ...prev.ingredients,
-          [name]: prev.ingredients[name] + 1,
-        },
-      };
-    });
-  };
-
-  const handleQuantityDecrease = (name) => {
-    // console.log("Input Modify Decrease!");
-    // console.log("name", name);
-
-    setState((prev) => {
-      // console.log("prev", prev);
-      return {
-        ...prev,
-        ingredients: {
-          ...prev.ingredients,
-          [name]: prev.ingredients[name] - 1,
+          [ingredient.name]: {
+            ...prev.ingredients[ingredient.name],
+            servings: prev.ingredients[ingredient.name].servings + incrementer,
+          },
         },
       };
     });
@@ -181,8 +167,7 @@ export default function NewMeal() {
             <Page2
               state={state}
               onAdd={handleAdd}
-              onQuantityAdd={handleQuantityAdd}
-              onQuantityDecrease={handleQuantityDecrease}
+              onQuantityChange={handleQuantityChange}
             />
           )}
           {currentStep === 3 && <Page3 state={state} />}
