@@ -22,6 +22,8 @@ const useStyles = makeStyles({
     gridTemplateColumns: "3fr 1fr",
     gridTemplateRows: "6em 1fr",
     gridTemplateAreas: '"search summary" "list summary"',
+    width: "100%",
+    height: "100%",
   },
   search: {
     gridArea: "search",
@@ -37,7 +39,7 @@ const useStyles = makeStyles({
   },
   ingredientCard: {
     display: "grid",
-    gridTemplateColumns: "auto auto auto",
+    gridTemplateColumns: "auto 1fr auto",
     gridTemplateRows: "1fr",
     gridTemplateAreas: '"image name servings"',
     alignItems: "center",

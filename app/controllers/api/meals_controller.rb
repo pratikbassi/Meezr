@@ -14,22 +14,19 @@ class Api::MealsController < ApplicationController
     if user = nil
       render :json => { message: "Please Login To Create A Meal" }, :status => 401
     end
-    # pp data
-    # pp request.cookies["user_id"]
-    newMeal = Meal.create( 
+    newMeal = Meal.create(
       user_id: request.cookies["user_id"],
       is_public: data['is_public'],
       title: data['title'],
       desc: data['description']
     )
-    # pp newMeal['id']
-    newMealPhotos = MealPhoto.create(
-      image_url: data['image_url'],
-      meal_id: newMeal['id']
-    )
+    data['image_url'].each do |image|
+      MealPhoto.create(
+        image_url: image,
+        meal_id: newMeal['id']
+      )
+    end
     data['ingredients'].each do |ingredient| 
-      # pp "looping"
-      # pp ingredient
       MealIngredient.create(
         meal_id: newMeal['id'],
         product: ingredient[0],
@@ -44,7 +41,7 @@ class Api::MealsController < ApplicationController
       meal_id: newMeal['id'],
       category: data['type']
     )
-    if Meal.exists?(newMeal.id) && MealIngredient.exists?(newMeal.id)
+    if Meal.exists?(newMeal.id)
       render :json => { message: "Successfully Created Entry" }
     else
       render :json => { message: "Error Creating Entry" }, :status => 400

@@ -3,13 +3,32 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Container, Typography, Button } from "@material-ui/core";
 import {} from "@material-ui/icons";
 import axios from "axios";
+import { ThemeProvider } from "@material-ui/core/styles";
+import theme from "theme";
 
 import Page1 from "./Page1";
 import Page2 from "./Page2";
 import Page3 from "./Page3";
 import Page4 from "./Page4";
 
-const useStyles = makeStyles({});
+const useStyles = makeStyles({
+  create_meal: {
+    boxShadow: theme.shadows[4],
+  },
+  currentStep: {},
+  form: {
+    display: "flex",
+    flexDirection: "column",
+    alignContent: "space-between",
+  },
+  formSteps: {
+    minHeight: "50vh",
+  },
+  stepButtons: {
+    display: "flex",
+    alignContent: "space-between",
+  },
+});
 
 export default function NewMeal() {
   const classes = useStyles();
@@ -19,8 +38,8 @@ export default function NewMeal() {
     type: "Breakfast",
     calorieGoal: 500,
     ingredients: {},
-    title: "Default Title",
-    description: "Default Description",
+    title: "",
+    description: "",
     image_url: [],
     is_public: false,
   });
@@ -153,49 +172,86 @@ export default function NewMeal() {
     });
   };
 
+  const [checked, setChecked] = React.useState(false);
+
+  const handleTransition = () => {
+    setChecked((prev) => !prev);
+  };
+
   return (
-    <>
-      <Container>
+    <ThemeProvider theme={theme}>
+      <Container className={classes.create_meal}>
         <Typography variant="h2" className={classes.root}>
           Create a New Meal
         </Typography>
-        <p>Step {currentStep} </p>
-        <form onSubmit={handleSubmit}>
-          {/* Check and render appropiate view */}
-          {currentStep === 1 && <Page1 state={state} onChange={handleChange} />}
-          {currentStep === 2 && (
-            <Page2
-              state={state}
-              onAdd={handleAdd}
-              onQuantityChange={handleQuantityChange}
-            />
-          )}
-          {currentStep === 3 && <Page3 state={state} />}
-          {currentStep === 4 && (
-            <Page4
-              state={state}
-              onChange={handleChange}
-              onBoolChange={handleBoolChange}
-            />
-          )}
+        <Typography variant="subtitle1" className={classes.currentStep}>
+          Step {currentStep}
+        </Typography>
+        <form onSubmit={handleSubmit} className={classes.form}>
+          <div className={classes.formSteps}>
+            {/* Check and render appropiate view */}
+            {currentStep === 1 && (
+              <Page1 state={state} onChange={handleChange} />
+            )}
+            {currentStep === 2 && (
+              <Page2
+                state={state}
+                onAdd={handleAdd}
+                onQuantityChange={handleQuantityChange}
+              />
+            )}
+            {currentStep === 3 && <Page3 state={state} />}
+            {currentStep === 4 && (
+              <Page4
+                state={state}
+                onChange={handleChange}
+                onBoolChange={handleBoolChange}
+              />
+            )}
+          </div>
 
-          {/* Check and render appropiate buttons */}
-          {currentStep === 1 && <Button onClick={_next}> Next </Button>}
-          {currentStep > 1 && currentStep < 4 && (
-            <>
-              <Button onClick={_back}> Back </Button>
-              <Button onClick={_next}> Next </Button>
-            </>
-          )}
-          {currentStep === 4 && (
-            <>
-              <Button onClick={_back}> Back </Button>
-              <Button onClick={handleSubmit}> Submit </Button>
-            </>
-          )}
-          <Typography variant="button">{submitMsg}</Typography>
+          <div className={classes.stepButtons}>
+            {/* Check and render appropiate buttons */}
+            {currentStep === 1 && (
+              <>
+                <Button disabled variant="outlined" onClick={_back}>
+                  Back
+                </Button>
+                <Button color="primary" onClick={_next}>
+                  Next
+                </Button>
+              </>
+            )}
+            {currentStep > 1 && currentStep < 4 && (
+              <>
+                <Button variant="outlined" onClick={_back}>
+                  Back
+                </Button>
+                <Button color="primary" onClick={_next}>
+                  Next
+                </Button>
+              </>
+            )}
+            {currentStep === 4 && (
+              <>
+                <Button variant="outlined" onClick={_back}>
+                  Back
+                </Button>
+                <Button color="primary" onClick={handleSubmit}>
+                  Submit
+                </Button>
+              </>
+            )}
+
+            {submitMsg && (
+              <>
+                <br />
+                <Typography variant="button">{submitMsg}</Typography>
+              </>
+            )}
+          </div>
         </form>
       </Container>
-    </>
+    </ThemeProvider>
   );
 }

@@ -14,7 +14,31 @@ import {} from "@material-ui/icons";
 
 import Meal from "../Meal";
 
-const useStyles = makeStyles({});
+const useStyles = makeStyles({
+  page4: {
+    display: "grid",
+    gridTemplateColumns: "auto auto",
+    gridTemplateRows: "auto auto",
+    gridTemplateAreas: '"textInput privacy" "preview preview"',
+  },
+  textInput: {
+    gridArea: "textInput",
+  },
+  imageUpload: {
+    display: "flex",
+    alignItems: "end",
+  },
+  privacy: {
+    gridArea: "privacy",
+  },
+  preview: {
+    gridArea: "preview",
+  },
+  textField: {
+    width: "20em",
+    maxWidth: "90vw",
+  },
+});
 
 export default function Page4(props) {
   const classes = useStyles();
@@ -23,17 +47,24 @@ export default function Page4(props) {
   const { is_public, ingredients, image_url, description, title } = state;
 
   const renderMealPreview = () => {
-    const ingredientsArr = [];
-    for (const ingredient in ingredients) {
-      if (ingredients.hasOwnProperty(ingredient)) {
-        if (ingredients[ingredient] > 0) {
-          ingredientsArr.push({
-            product: ingredient,
-            servings: ingredients[ingredient],
-          });
-        }
-      }
-    }
+    // const ingredientsArr = [];
+    // for (const ingredient in ingredients) {
+    //   if (ingredients.hasOwnProperty(ingredient)) {
+    //     if (ingredients[ingredient] > 0) {
+    //       ingredientsArr.push({
+    //         product: ingredient,
+    //         servings: ingredients[ingredient],
+    //       });
+    //     }
+    //   }
+    // }
+    const ingredients = Object.values(state.ingredients);
+    const ingredientsArr = ingredients.map((ingredient) => ({
+      meal_id: 0,
+      product: ingredient.name,
+      serving_size: ingredient.servings,
+    }));
+    console.log(ingredientsArr);
 
     const imageArr = image_url.map((image_url) => {
       return {
@@ -43,6 +74,11 @@ export default function Page4(props) {
       };
     });
 
+    const tagsArr = [
+      { meal_id: 0, category: state.type },
+      { meal_id: 0, category: state.size },
+    ];
+
     const newProps = {
       id: 0,
       image: imageArr,
@@ -50,7 +86,7 @@ export default function Page4(props) {
       description: description,
       user: "You",
       ingredients: ingredientsArr,
-      tags: ["preview"],
+      tags: tagsArr,
       calories: 500,
       score: 0.6,
       prepTime: 400,
@@ -87,42 +123,51 @@ export default function Page4(props) {
   }, [state]);
 
   return (
-    <section>
+    <section className={classes.page4}>
       <Typography variant="h4">Publish your meal</Typography>
-      <TextField
-        name="title"
-        id="new-meal-title"
-        label="Title"
-        value={title}
-        onChange={onChange}
-      />
-      <br />
-      <TextField
-        name="description"
-        id="new-meal-description"
-        label="Description"
-        multiline
-        value={description}
-        onChange={onChange}
-      />
-      <br />
-      <TextField
-        name="image_url"
-        id="new-meal-image-url"
-        label="Image URL"
-        value={newImage}
-        onChange={handleImageChange}
-      />
-      <Button
-        onClick={(event) => {
-          setNewImageArr((prev) => [...prev, event.currentTarget.value]);
-          setNewImage("");
-        }}
-        value={newImage}
-      >
-        Add Image URL
-      </Button>
-      <FormControl component="fieldset">
+      <div className={classes.textInput}>
+        <TextField
+          className={classes.textField}
+          name="title"
+          id="new-meal-title"
+          label="Title"
+          value={title}
+          onChange={onChange}
+        />
+        <br />
+        <TextField
+          className={classes.textField}
+          name="description"
+          id="new-meal-description"
+          label="Description"
+          multiline
+          value={description}
+          onChange={onChange}
+        />
+        <br />
+        <div className={classes.imageUpload}>
+          <TextField
+            className={classes.textField}
+            name="image_url"
+            id="new-meal-image-url"
+            label="Image URL"
+            value={newImage}
+            onChange={handleImageChange}
+          />
+          <Button
+            variant="outlined"
+            onClick={(event) => {
+              setNewImageArr((prev) => [...prev, event.currentTarget.value]);
+              setNewImage("");
+            }}
+            value={newImage}
+          >
+            Add Image
+          </Button>
+        </div>
+      </div>
+
+      <FormControl className={classes.privacy} component="fieldset">
         <FormLabel component="legend">Meal Privacy Setting</FormLabel>
         <RadioGroup
           aria-label="meal-privacy"
@@ -134,8 +179,10 @@ export default function Page4(props) {
           <FormControlLabel value={true} control={<Radio />} label="Public" />
         </RadioGroup>
       </FormControl>
-      <Typography variant="h4">Preview</Typography>
-      {renderMealPreview()}
+      <div className={classes.preview}>
+        <Typography variant="h4">Preview</Typography>
+        {renderMealPreview()}
+      </div>
     </section>
   );
 }
