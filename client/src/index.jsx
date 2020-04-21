@@ -10,7 +10,7 @@ ReactDOM.render(
   <React.StrictMode>
     <CssBaseline />
     <App />
-    <AppOld />
+    {/* <AppOld /> */}
   </React.StrictMode>,
   document.getElementById("root")
 );

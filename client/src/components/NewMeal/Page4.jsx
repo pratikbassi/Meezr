@@ -64,7 +64,6 @@ export default function Page4(props) {
       product: ingredient.name,
       serving_size: ingredient.servings,
     }));
-    console.log(ingredientsArr);
 
     const imageArr = image_url.map((image_url) => {
       return {
@@ -93,7 +92,6 @@ export default function Page4(props) {
       cost: 500,
       is_favorited: false,
     };
-    console.log("newProps", newProps);
 
     return <Meal props={newProps} />;
   };
@@ -104,7 +102,6 @@ export default function Page4(props) {
   );
 
   const handleImageChange = (event) => {
-    console.log(event.target);
     const { name, value } = event.target;
     setNewImage(value);
   };
