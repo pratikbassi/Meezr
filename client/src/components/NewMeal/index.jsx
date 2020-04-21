@@ -72,6 +72,8 @@ export default function NewMeal() {
     }
   */
 
+  const [statsHTML, setStatsHTML] = useState("<p></p>");
+
   const [submitMsg, setSubmitMsg] = useState("");
 
   const [currentStep, setCurrentStep] = useState(1);
@@ -181,9 +183,11 @@ export default function NewMeal() {
                 state={state}
                 onAdd={handleAdd}
                 onQuantityChange={handleQuantityChange}
+                statsHTML={statsHTML}
+                setStatsHTML={setStatsHTML}
               />
             )}
-            {currentStep === 3 && <Page3 state={state} />}
+            {currentStep === 3 && <Page3 state={state} statsHTML={statsHTML} />}
             {currentStep === 4 && (
               <Page4
                 state={state}
