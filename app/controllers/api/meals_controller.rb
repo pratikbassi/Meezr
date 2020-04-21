@@ -10,12 +10,45 @@ class Api::MealsController < ApplicationController
 
   def create
     data = JSON.parse(request.body.read)
-    p data.class
-    pp data
-    pp request.cookies["user_id"]
-    pp request.cookies.class
-    # pp request.raw_post
-    render :json => { message: "Hit Create Entry" }
+    user = request.cookies["user_id"]
+    if user = nil
+      render :json => { message: "Please Login To Create A Meal" }, :status => 401
+    end
+    # pp data
+    # pp request.cookies["user_id"]
+    newMeal = Meal.create( 
+      user_id: request.cookies["user_id"],
+      is_public: data['is_public'],
+      title: data['title'],
+      desc: data['description']
+    )
+    # pp newMeal['id']
+    newMealPhotos = MealPhoto.create(
+      image_url: data['image_url'],
+      meal_id: newMeal['id']
+    )
+    data['ingredients'].each do |ingredient| 
+      # pp "looping"
+      # pp ingredient
+      MealIngredient.create(
+        meal_id: newMeal['id'],
+        product: ingredient[0],
+        serving_size: ingredient[1]
+      )
+    end
+    MealCategory.create(
+      meal_id: newMeal['id'],
+      category: data['size']
+    )
+    MealCategory.create(
+      meal_id: newMeal['id'],
+      category: data['type']
+    )
+    if Meal.exists?(newMeal.id) && MealIngredient.exists?(newMeal.id)
+      render :json => { message: "Successfully Created Entry" }
+    else
+      render :json => { message: "Error Creating Entry" }, :status => 400
+    end
   end
 
   def destroy

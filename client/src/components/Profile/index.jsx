@@ -4,23 +4,22 @@ import { Container } from "@material-ui/core";
 import Cookies from "js-cookie";
 import axios from "axios";
 
-
-
+import MealList from "./MealList";
 
 const useStyles = makeStyles({});
 
 export default function Profile() {
-  const [state, useState] = React.useState()
-  const user = Cookies.get('user_id')
-
+  const [state, useState] = React.useState();
+  const user = Cookies.get("user_id");
 
   const getMealsForUser = (user) => {
-    return Promise.resolve(axios({
-      method: "get",
-      url: `/api/users/${user}`,
-
-    }))
-  }
+    return Promise.resolve(
+      axios({
+        method: "get",
+        url: `/api/users/${user}`,
+      })
+    );
+  };
 
   const classes = useStyles();
   return (
