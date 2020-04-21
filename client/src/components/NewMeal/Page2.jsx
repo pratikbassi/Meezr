@@ -1,17 +1,9 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
-  Container,
-  FormControl,
-  InputLabel,
-  Input,
-  FormHelperText,
-  Select,
-  MenuItem,
   TextField,
   Button,
   Card,
-  CardActionArea,
   CardMedia,
   CardContent,
   Typography,
@@ -48,7 +40,7 @@ const useStyles = makeStyles({
     gridTemplateColumns: "auto auto auto",
     gridTemplateRows: "1fr",
     gridTemplateAreas: '"image name servings"',
-    alignContent: "center",
+    alignItems: "center",
   },
   image: {
     gridArea: "image",
@@ -71,10 +63,37 @@ export default function Page2(props) {
 
   const [searchValue, setSearchValue] = useState("");
   const [debouncedSearchValue] = useDebounce(searchValue, 1000);
+  const [open, setOpen] = useState(false);
+  const [options, setOptions] = useState([]);
+  const loading = open && options.length === 0;
 
-  useEffect(() => {
-    console.log("search value updated!");
-  }, [searchValue]);
+  const createAddedIngredients = () => {
+    const ingredients = Object.values(state.ingredients);
+    console.log("object Values: ", ingredients);
+    return ingredients.map((ingredient) => (
+      <Card key={ingredient.id} className={classes.ingredientCard}>
+        <CardMedia
+          className={classes.image}
+          image={`https://spoonacular.com/cdn/ingredients_100x100/${ingredient.image}`}
+          title={ingredient.name}
+        />
+        <CardContent className={classes.name}>
+          <Typography gutterBottom variant="h5" component="h2">
+            {ingredient.name}
+          </Typography>
+        </CardContent>
+        <CardActions className={classes.servings}>
+          <Button onClick={() => onQuantityChange(ingredient, -1)}>
+            <Remove />
+          </Button>
+          <span>{ingredient.servings}</span>
+          <Button onClick={() => onQuantityChange(ingredient, 1)}>
+            <Add />
+          </Button>
+        </CardActions>
+      </Card>
+    ));
+  };
 
   useEffect(() => {
     if (debouncedSearchValue != "") {
@@ -89,114 +108,6 @@ export default function Page2(props) {
     }
   }, [debouncedSearchValue]);
 
-  const createAutocompleteEntries = () => {
-    let autocompletedata = [
-      {
-        name: "butter",
-        image: "butter-sliced.jpg",
-      },
-      {
-        name: "buttermilk",
-        image: "buttermilk.jpg",
-      },
-      {
-        name: "butterscotch",
-        image: "caramel-sauce.jpg",
-      },
-      {
-        name: "butter beans",
-        image: "dry-cannellini-beans.jpg",
-      },
-      {
-        name: "butter lettuce",
-        image: "Butter-or-Boston-Bibb-lettuce.jpg",
-      },
-      {
-        name: "butternut squash",
-        image: "butternut-squash.jpg",
-      },
-      {
-        name: "butterscotch chips",
-        image: "peanut-butter-or-butterscotch-chips.jpg",
-      },
-      {
-        name: "butter crackers",
-        image: "crackers.jpg",
-      },
-      {
-        name: "buttermilk biscuits",
-        image: "buttermilk-biscuits.jpg",
-      },
-      {
-        name: "butterfinger",
-        image: "butterfinger.png",
-      },
-    ];
-    const output = autocompletedata.map((entry) => (
-      <MenuItem value={entry}>{entry.name}</MenuItem>
-    ));
-    // return output;
-    return autocompletedata;
-  };
-
-  const createAddedIngredients = (state) => {
-    const ingredients = state.ingredients;
-    console.log("ingredients", ingredients);
-
-    const output = [];
-    for (const ingredient in ingredients) {
-      if (ingredients.hasOwnProperty(ingredient)) {
-        if (ingredients[ingredient].servings > 0) {
-          output.push(
-            <Card className={classes.ingredientCard}>
-              <CardMedia
-                className={classes.image}
-                image={`https://spoonacular.com/cdn/ingredients_100x100/${ingredients[ingredient].image}`}
-                title={ingredient}
-              />
-              <CardContent className={classes.name}>
-                <Typography gutterBottom variant="h5" component="h2">
-                  {ingredient}
-                </Typography>
-              </CardContent>
-              <CardActions className={classes.servings}>
-                <Button
-                  onClick={() => onQuantityChange(ingredients[ingredient], -1)}
-                >
-                  <Remove />
-                </Button>
-                <span>{ingredients[ingredient].servings}</span>
-                <Button
-                  onClick={() => onQuantityChange(ingredients[ingredient], 1)}
-                >
-                  <Add />
-                </Button>
-              </CardActions>
-            </Card>
-          );
-        }
-      }
-    }
-    console.log("outputting ingredients added", output);
-    return output;
-  };
-
-  const [open, setOpen] = useState(false);
-  const [options, setOptions] = useState([]);
-  const loading = open && options.length === 0;
-
-  // useEffect(() => {
-  //   // let active = true;
-
-  //   // if (!loading) {
-  //   //   return undefined;
-  //   // }
-
-  //   // return () => {
-  //   //   active = false;
-  //   // };
-  // }, [debouncedSearchValue]);
-
   useEffect(() => {
     if (!open) {
       setOptions([]);
@@ -205,20 +116,12 @@ export default function Page2(props) {
 
   return (
     <section className={classes.page2}>
-      {/* <FormControl className={classes.search}>
-        <InputLabel id="new-ingredient">Ingredient Search</InputLabel>
-        <Select
-          name="ingredients"
-          labelId="new-ingredient"
-          id="new-ingredient"
-          value={state.type}
-          onChange={onAdd}
-        >
-          {createAutocompleteEntries()}
-        </Select>
-      </FormControl> */}
       <Autocomplete
-        onChange={(event, value) => onAdd(value)}
+        onChange={(event, value) => {
+          if (value) {
+            return onAdd(value);
+          }
+        }}
         id="asynchronous-demo"
         open={open}
         onOpen={() => {
@@ -251,7 +154,7 @@ export default function Page2(props) {
           />
         )}
       />
-      <div className={classes.list}>{createAddedIngredients(state)}</div>
+      <div className={classes.list}>{createAddedIngredients()}</div>
     </section>
   );
 }
