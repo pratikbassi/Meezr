@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Container } from "@material-ui/core";
+import { Container, LinearProgress } from "@material-ui/core";
 import {} from "@material-ui/icons";
 import axios from "axios";
 
@@ -61,7 +61,7 @@ export default function SingleMeal(props) {
 
   return (
     <>
-      <Container>{meals}</Container>
+      <Container>{meals.length === 0 ? <LinearProgress /> : meals}</Container>
     </>
   );
 }
