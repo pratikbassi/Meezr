@@ -11,6 +11,8 @@ import {
   CardContent,
   CardActions,
   Collapse,
+  Tooltip,
+  ClickAwayListener,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import {
@@ -22,7 +24,7 @@ import {
 import clsx from "clsx";
 import { ThemeProvider } from "@material-ui/core/styles";
 import theme from "theme";
-
+import copy from "clipboard-copy";
 import Details from "./Details";
 
 const useStyles = makeStyles(() => ({
@@ -102,13 +104,14 @@ export default function Meal(props) {
     calories,
     score,
     is_favorited,
+    is_extended,
   } = state;
 
   useEffect(() => {
     setState(props.props);
   }, [props.props]);
 
-  const [expanded, setExpanded] = useState(props.props.is_expanded || false);
+  const [expanded, setExpanded] = useState(is_extended || false);
 
   const favItem = () => {
     // const newFavState = is_favorited
@@ -119,6 +122,24 @@ export default function Meal(props) {
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
+  };
+
+  // const copy = (event) => {
+  //   console.log(event.currentTarget);
+  //   const target = event.currentTarget;
+  //   target.select();
+  //   document.execCommand("copy");
+  // };
+
+  const [open, setOpen] = React.useState(false);
+
+  const handleTooltipClose = () => {
+    setOpen(false);
+  };
+
+  const handleTooltipOpen = () => {
+    setOpen(true);
+    copy(`${window.location.host}/meals/${id}`);
   };
 
   return (
@@ -149,17 +170,17 @@ export default function Meal(props) {
           </Typography>
 
           <Typography variant="body2" className={classes.calories}>
-            Calories: {calories}
+            {/* Calories: {calories} */}
           </Typography>
           <Typography variant="body2" className={classes.score}>
-            <span>Score: {score}</span>
+            {/* <span>Score: {score}</span> */}
           </Typography>
 
-          <Typography variant="body2" className={classes.tags}>
+          <div className={classes.tags}>
             {tags.map((tag) => (
-              <Chip label={tag.category} />
+              <Chip key={tag.id} label={tag.category} />
             ))}
-          </Typography>
+          </div>
         </CardContent>
         <CardActions className={classes.share}>
           <IconButton
@@ -169,9 +190,25 @@ export default function Meal(props) {
           >
             {is_favorited ? <Favorite /> : <FavoriteBorder />}
           </IconButton>
-          <IconButton aria-label="share">
-            <Share />
-          </IconButton>
+          <ClickAwayListener onClickAway={handleTooltipClose}>
+            <Tooltip
+              PopperProps={{
+                disablePortal: true,
+              }}
+              onClose={handleTooltipClose}
+              open={open}
+              disableFocusListener
+              disableHoverListener
+              disableTouchListener
+              onClick={handleTooltipOpen}
+              title="Copied to clipboard!"
+            >
+              <IconButton aria-label="share">
+                <Share />
+              </IconButton>
+            </Tooltip>
+          </ClickAwayListener>
+
           <IconButton
             className={clsx(classes.expandIcon, {
               [classes.expandOpen]: expanded,

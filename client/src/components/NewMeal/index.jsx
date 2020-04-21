@@ -43,7 +43,7 @@ export default function NewMeal() {
     image_url: [],
     is_public: false,
   });
-  console.log("state", state);
+  // console.log("state", state);
   /**
     {
         "id": 2,
@@ -75,7 +75,6 @@ export default function NewMeal() {
   const [submitMsg, setSubmitMsg] = useState("");
 
   const [currentStep, setCurrentStep] = useState(1);
-  // console.log("currentStep", currentStep);
 
   const _next = () => {
     if (currentStep <= 3) {
@@ -90,28 +89,21 @@ export default function NewMeal() {
   };
 
   const handleSubmit = () => {
-    console.log("submit!");
-    console.log("state!", state);
     axios
       .post("/api/meals", state)
       .then(function (response) {
-        console.log(response);
         setSubmitMsg(response.data.message);
       })
       .catch(function (error) {
-        console.log(error);
         setSubmitMsg(error.data.message);
       });
   };
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    console.log("Input Change!");
-    console.log(event.target);
     const newValue = {
       [name]: value,
     };
-    // console.log("Changing Size?", name);
     if (name === "size") {
       if (value === "Small") {
         newValue.calorieGoal = 500;
@@ -121,14 +113,11 @@ export default function NewMeal() {
         newValue.calorieGoal = 800;
       }
     }
-    console.log("newValue", newValue);
     setState((prev) => ({ ...prev, ...newValue }));
   };
 
   const handleBoolChange = (event) => {
     const { name, value } = event.target;
-    console.log("Input Bool Change!");
-    console.log(event.target);
     const newValue = {
       [name]: value === "true" ? true : false,
     };
@@ -137,9 +126,6 @@ export default function NewMeal() {
 
   const handleAdd = (obj) => {
     const { name, image } = obj;
-    // console.log("Input Add!");
-    // console.log(event);
-    // console.log(state);
     setState((prev) => {
       return {
         ...prev,
@@ -155,10 +141,7 @@ export default function NewMeal() {
   };
 
   const handleQuantityChange = (ingredient, incrementer) => {
-    // console.log("Input Modify Add!");
-    // console.log("ingredient", ingredient);
     setState((prev) => {
-      // console.log("prev", prev);
       return {
         ...prev,
         ingredients: {

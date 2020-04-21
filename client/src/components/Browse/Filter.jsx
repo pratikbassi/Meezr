@@ -4,7 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 const useStyles = makeStyles({
   filter: {
     height: "100vh",
-    backgroundColor: "orange",
+    // backgroundColor: "orange",
     width: "100%",
   },
 });
