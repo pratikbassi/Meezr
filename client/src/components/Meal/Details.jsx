@@ -87,10 +87,32 @@ export default function Details(props) {
                       {ingredient.nutrition.nutrients[0].unit}
                     </TableCell>
                     <TableCell align="right">
-                      {(ingredient.estimatedCost.value / 100).toFixed(2)}
+                      ${(ingredient.estimatedCost.value / 100).toFixed(2)}
                     </TableCell>
                   </TableRow>
                 ))}
+                <TableRow>
+                  <TableCell rowSpan={3} />
+                  <TableCell colSpan={1}>Totals</TableCell>
+                  <TableCell align="right">
+                    {array
+                      .reduce(function (total, currentValue) {
+                        return (
+                          total + currentValue.nutrition.nutrients[0].amount
+                        );
+                      }, 0)
+                      .toFixed(2)}
+                    {" cal"}
+                  </TableCell>
+                  <TableCell align="right">
+                    $
+                    {(
+                      array.reduce(function (total, currentValue) {
+                        return total + currentValue.estimatedCost.value;
+                      }, 0) / 100
+                    ).toFixed(2)}
+                  </TableCell>
+                </TableRow>
               </TableBody>
             </Table>
           </CardContent>
