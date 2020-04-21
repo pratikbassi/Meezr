@@ -13,7 +13,6 @@ export default function SearchBox(props) {
   let history = useHistory();
 
   const search = (data) => {
-    console.log("search hit");
     history.push(`/search/${data}`);
   };
 

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Typography,
@@ -44,35 +43,34 @@ export default function Details(props) {
       servings: 1,
       includeNutrition: true,
     };
-    console.log("api call data:", data);
+    // console.log("api call data:", data);
 
     return axios.post("/api/ingredients/parse", data);
   };
 
   useEffect(() => {
-    console.log("useeffect");
-
     fetchIngredientInfo(ingredients).then((res) => {
       if (res.status === 200) {
-        console.log("res.data", res.data);
+        // console.log("res.data", res.data);
         setData(res.data);
       }
     });
   }, []);
 
   const showData = (array) => {
-    console.log(array);
+    // console.log(array);
 
     return (
       <>
-        <Typography variant="body2">Prep Time: {prepTime}</Typography>
+        {/* <Typography variant="body2">Prep Time: {prepTime}</Typography> */}
         <Card>
           <CardHeader title={"Ingredients"} />
           <CardContent>
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>Ingredients</TableCell>
+                  <TableCell>Ingredients Breakdown</TableCell>
+                  <TableCell align="right">Servings</TableCell>
                   <TableCell align="right">Calories</TableCell>
                   <TableCell align="right">Price ($)</TableCell>
                 </TableRow>
@@ -83,8 +81,14 @@ export default function Details(props) {
                     <TableCell component="th" scope="row">
                       {ingredient.originalName}
                     </TableCell>
-                    <TableCell align="right">fat</TableCell>
-                    <TableCell align="right">price</TableCell>
+                    <TableCell align="right">{ingredient.amount}</TableCell>
+                    <TableCell align="right">
+                      {ingredient.nutrition.nutrients[0].amount}{" "}
+                      {ingredient.nutrition.nutrients[0].unit}
+                    </TableCell>
+                    <TableCell align="right">
+                      {(ingredient.estimatedCost.value / 100).toFixed(2)}
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -92,7 +96,14 @@ export default function Details(props) {
           </CardContent>
         </Card>
 
-        <Typography variant="body2">Approx Cost: {cost}</Typography>
+        <Typography variant="body2">
+          Approx Cost: $
+          {(
+            array.reduce(function (total, currentValue) {
+              return total + currentValue.estimatedCost.value;
+            }, 0) / 100
+          ).toFixed(2)}
+        </Typography>
       </>
     );
   };

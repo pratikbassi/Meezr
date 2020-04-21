@@ -71,7 +71,6 @@ export default function Page2(props) {
 
   const createAddedIngredients = () => {
     const ingredients = Object.values(state.ingredients);
-    console.log("object Values: ", ingredients);
     return ingredients.map((ingredient) => (
       <Card key={ingredient.id} className={classes.ingredientCard}>
         <CardMedia
@@ -99,7 +98,6 @@ export default function Page2(props) {
 
   useEffect(() => {
     if (debouncedSearchValue != "") {
-      console.log("search call updated!");
       axios
         .get("/api/ingredients/autocomplete", {
           params: {

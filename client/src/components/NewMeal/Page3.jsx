@@ -39,7 +39,6 @@ export default function Page3(props) {
   const { calorieGoal, ingredients, type, size } = state;
   const renderIngredients = () => {
     const ingredients = Object.values(state.ingredients);
-    console.log("object Values: ", ingredients);
     return ingredients.map((ingredient) => (
       <Card key={ingredient.id} className={classes.ingredientCard}>
         <CardMedia
