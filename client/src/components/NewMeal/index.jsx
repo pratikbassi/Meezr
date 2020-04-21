@@ -28,6 +28,33 @@ export default function NewMeal() {
     is_public: false,
   });
   console.log("state", state);
+  /**
+    {
+        "id": 2,
+        "user_id": 37,
+        "is_public": true,
+        "is_deleted": false,
+        "title": "Bok Choy - Baby",
+        "desc": "Bar Bran Honey NutBar Bran Honey NutBar Bran Honey NutBar Bran Honey NutBar Bran Honey Nut",
+        "created_at": "2020-04-19T04:41:14.625Z",
+        "updated_at": "2020-04-19T04:41:14.625Z",
+        "meal_photos": [
+            {
+                "id": 86,
+                "image_url": "http://dummyimage.com/318x753.jpg/cc0000/ffffff",
+                "meal_id": 2,
+                "created_at": "2020-04-19T04:43:23.752Z",
+                "updated_at": "2020-04-19T04:43:23.752Z"
+            }
+        ],
+        "meal_ingredients": [
+        ],
+        "meal_categories": [],
+        "user": {
+            "user_name": "Kerrill Binfield"
+        }
+    }
+  */
 
   const [submitMsg, setSubmitMsg] = useState("");
 

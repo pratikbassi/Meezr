@@ -35,7 +35,7 @@ export default function Page4(props) {
       }
     }
 
-    const imageArr = [image_url].map((image_url) => {
+    const imageArr = image_url.map((image_url) => {
       return {
         id: 0,
         image_url: image_url,
@@ -62,24 +62,10 @@ export default function Page4(props) {
     return <Meal props={newProps} />;
   };
 
-  /**
-   {
-  "id": 22,
-  "image": [],
-  "title": "Soup - Campbells Chicken",
-  "description": "Crab Brie In PhylloCrab Brie In PhylloCrab Brie In PhylloCrab Brie In PhylloCrab Brie In Phyllo",
-  "user": "Allayne Cassey",
-  "ingredients": [],
-  "tags": [],
-  "calories": 0,
-  "score": 0,
-  "prepTime": 0,
-  "cost": 0,
-  "is_favorited": false
-}
-   */
   const [newImage, setNewImage] = useState("");
-  const [newImageArr, setNewImageArr] = useState([]);
+  const [newImageArr, setNewImageArr] = useState(
+    image_url.map((imageObj) => imageObj.image_url)
+  );
 
   const handleImageChange = (event) => {
     console.log(event.target);
