@@ -1,19 +1,16 @@
 import React from "react";
-import axios from "axios";
 
-import { makeStyles } from "@material-ui/core/styles";
 
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Dialog from "@material-ui/core/Dialog";
 
 import RegisterForm from "components/Auth/Register";
 import LoginForm from "components/Auth/Login";
+import Profile from "../Profile/index"
 
 import theme from "theme";
 import { ThemeProvider } from "@material-ui/core/styles";
-import Cookies from "js-cookie";
 
-const useStyles = makeStyles((theme) => ({}));
 
 export default function RenderAuth(props) {
   const { registerUser, loginUser } = props;
@@ -25,7 +22,7 @@ export default function RenderAuth(props) {
     return (
       <ThemeProvider theme={theme}>
         <Dialog
-          onClose={handleClose}
+          onClose={() => handleClose()}
           aria-labelledby="simple-dialog-title"
           open={props.open}
         >
@@ -39,12 +36,26 @@ export default function RenderAuth(props) {
     return (
       <ThemeProvider theme={theme}>
         <Dialog
-          onClose={handleClose}
+          onClose={() => handleClose()}
           open={props.open}
           aria-labelledby="simple-dialog-title"
         >
           <DialogTitle id="simple-dialog-title">Welcome back!</DialogTitle>
           <LoginForm onSubmit={loginUser} />
+        </Dialog>
+      </ThemeProvider>
+    );
+  }
+  if (props.buttonType === "profile") {
+    return (
+      <ThemeProvider theme={theme}>
+        <Dialog
+          onClose={handleClose}
+          open={props.open}
+          aria-labelledby="simple-dialog-title"
+        >
+          <DialogTitle id="simple-dialog-title">Hi {props.profileData.user_name}!</DialogTitle>
+          <Profile user_name={props.profileData.user_name} meals={props.profileData.meals} favorites={props.profileData.favorites}/>
         </Dialog>
       </ThemeProvider>
     );
