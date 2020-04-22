@@ -5,7 +5,7 @@ class Api::MealsController < ApplicationController
   end
 
   def show
-    render :json => Meal.includes([:meal_photos, :meal_ingredients, :meal_categories, :user]).find(params[:id]), include: [:meal_photos, :meal_ingredients, :meal_categories => {:only => :category_id}, :user => {:only => :user_name}]
+    render :json => Meal.includes([:meal_photos, :meal_ingredients, :meal_categories, :user]).find(params[:id]), include: [:meal_photos, :meal_ingredients, :meal_categories, :user => {:only => :user_name}]
   end
 
   def create
