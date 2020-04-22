@@ -37,7 +37,11 @@ export default function Details(props) {
   const [data, setData] = useState([]);
 
   const fetchIngredientInfo = (objArray) => {
-    const ingredientList = objArray.map((obj) => obj.product);
+    console.log("objArray", objArray);
+
+    const ingredientList = objArray.map(
+      (obj) => `${obj.serving_size} servings ${obj.product}`
+    );
     const data = {
       ingredients: ingredientList,
       servings: 1,

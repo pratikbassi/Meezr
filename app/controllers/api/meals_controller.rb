@@ -26,11 +26,11 @@ class Api::MealsController < ApplicationController
         meal_id: newMeal['id']
       )
     end
-    data['ingredients'].each do |ingredient| 
+    data['ingredients'].to_a.each do |ingredient| 
       MealIngredient.create(
         meal_id: newMeal['id'],
-        product: ingredient[0],
-        serving_size: ingredient[1]
+        product: ingredient[1]['name'],
+        serving_size: ingredient[1]['servings']
       )
     end
     MealCategory.create(
