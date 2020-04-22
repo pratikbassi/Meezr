@@ -1,15 +1,8 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import {
-  Container,
-  Typography,
-  Card,
-  CardMedia,
-  CardContent,
-  CardActions,
-} from "@material-ui/core";
-import {} from "@material-ui/icons";
+import { Typography } from "@material-ui/core";
+import RenderIngredientListItem from "./RenderIngredientListItem";
+import RenderStats from "./RenderStats";
 
 const useStyles = makeStyles({
   page3: {},
@@ -35,43 +28,34 @@ const useStyles = makeStyles({
 
 export default function Page3(props) {
   const classes = useStyles();
-  const { state } = props;
+  const { state, statsHTML } = props;
   const { calorieGoal, ingredients, type, size } = state;
+
+  // const [debouncedStats] = useDebounce(state, 1000);
+
   const renderIngredients = () => {
     const ingredients = Object.values(state.ingredients);
     return ingredients.map((ingredient) => (
-      <Card key={ingredient.id} className={classes.ingredientCard}>
-        <CardMedia
-          className={classes.image}
-          image={`https://spoonacular.com/cdn/ingredients_100x100/${ingredient.image}`}
-          title={ingredient.name}
-        />
-        <CardContent className={classes.name}>
-          <Typography gutterBottom variant="h5" component="h2">
-            {ingredient.servings} serving of {ingredient.name}
-          </Typography>
-        </CardContent>
-      </Card>
+      <RenderIngredientListItem
+        key={ingredient.id}
+        ingredient={ingredient}
+        is_editable={false}
+      />
     ));
   };
+  // console.log("statsHTML", statsHTML);
+
   return (
     <section className={classes.page3}>
-      <Typography className={classes.summary} variant="h4">
-        Summary
-      </Typography>
+      <Typography variant="h5">Summary</Typography>
       <article className={classes.details}>
-        <Typography variant="h5">Meal Details</Typography>
-        <p>
-          Type: {type}
-          <br />
-          Size: {size}
-        </p>
-        <Typography variant="h5">Calorie Goal</Typography>
-        <p>
-          Actual Calories: {"some calculated value"}
-          <br />
-          Calorie Goal: {calorieGoal}
-        </p>
+        <Typography variant="subtitle1">
+          Meal Details for: {size} {type}
+        </Typography>
+        <Typography variant="subtitle2">Calorie Goal: {calorieGoal}</Typography>
+        <div className={classes.stats}>
+          <RenderStats statsHTML={statsHTML} />
+        </div>
         <Typography variant="h5">Ingredients</Typography>
         {renderIngredients()}
       </article>

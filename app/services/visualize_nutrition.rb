@@ -2,48 +2,42 @@ require 'faraday'
 require 'json'
 require 'dotenv'
 require "uri"
+require "net/http"
 Dotenv.load
 
-#Extract an ingredient from plain text.
-class ParsedIngredientInfo
+#Displays the images of the ingredients used in a recipe.
+class VisualizeNutrition
 
-  attr_accessor :ingredientList, :servings, :includeNutrition
+  attr_accessor :id, :defaultCss
 
   def initialize(ingredientList, servings)
     @ingredientList = ingredientList
     @servings = servings
   end
 
-
-  def parsed_ingredient_info
-
+  def get_nutrition_widget
     begin
       data = {
         ingredientList: @ingredientList.join("\n"),
-        includeNutrition: true,
-        servings: @servings
+        defaultCss: true,
+        servings: @servings,
+        showBacklink: true
       }
-  
+
       connection = Faraday.new(
         url: 'https://api.spoonacular.com/recipes/',
         params: {apiKey: ENV['API_KEY']},
-      ) 
-      # do |c|
-      #   pp c
-      # c.use Faraday::Response::RaiseError
-      # end
+      )
   
-      response = connection.post('parseIngredients') do |request|
+      response = connection.post('visualizeNutrition') do |request|
         request.headers['Content-Type'] = 'application/x-www-form-urlencoded'
         request.body = URI.encode_www_form(data)
       end
-    
-      if response.status != 200
-        pp "error"
-        Faraday::Response::RaiseError
-      end
-      data = JSON.parse(response.body)
-      return data
+  
+      data = response.body
+      # data.delete! '\\'
+      pp data
+      data
     rescue Exception => e 
       status = e.response[:status]
       response = JSON.parse(e.response[:body])
@@ -52,5 +46,5 @@ class ParsedIngredientInfo
   end
 end
 
-# test = ParsedIngredientInfo.new(["3 oz pork shoulder", "banana"], 2)
-# pp test.parsed_ingredient_info
+# ingredient_images = IngredientWidget.new('1082038')
+# ingredient_images.get_nutrition_widget

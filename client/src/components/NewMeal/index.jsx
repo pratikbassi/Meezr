@@ -1,7 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Container, Typography, Button } from "@material-ui/core";
+import {
+  Container,
+  Typography,
+  Button,
+  CircularProgress,
+  Snackbar,
+} from "@material-ui/core";
 import {} from "@material-ui/icons";
+import { Alert } from "@material-ui/lab";
 import axios from "axios";
 import { ThemeProvider } from "@material-ui/core/styles";
 import theme from "theme";
@@ -25,8 +32,9 @@ const useStyles = makeStyles({
     minHeight: "50vh",
   },
   stepButtons: {
+    marginBottom: "1em",
     display: "flex",
-    alignContent: "space-between",
+    alignItems: "center",
   },
 });
 
@@ -72,7 +80,9 @@ export default function NewMeal() {
     }
   */
 
-  const [submitMsg, setSubmitMsg] = useState("");
+  const [statsHTML, setStatsHTML] = useState("<p></p>");
+
+  const [submitMsg, setSubmitMsg] = useState({ is_error: false, message: "" });
 
   const [currentStep, setCurrentStep] = useState(1);
 
@@ -88,16 +98,7 @@ export default function NewMeal() {
     }
   };
 
-  const handleSubmit = () => {
-    axios
-      .post("/api/meals", state)
-      .then(function (response) {
-        setSubmitMsg(response.data.message);
-      })
-      .catch(function (error) {
-        setSubmitMsg(error.data.message);
-      });
-  };
+  const handleSubmit = () => {};
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -155,11 +156,33 @@ export default function NewMeal() {
     });
   };
 
-  const [checked, setChecked] = React.useState(false);
+  const [submitState, setSubmitState] = useState(false);
+  const [snackOpen, setSnackOpen] = useState(false);
 
-  const handleTransition = () => {
-    setChecked((prev) => !prev);
+  const handleClose = () => {
+    setSnackOpen(false);
   };
+
+  useEffect(() => {
+    if (submitState) {
+      axios
+        .post("/api/meals", state)
+        .then(function (response) {
+          setSubmitMsg({ is_error: false, message: response.data.message });
+          setSubmitState(false);
+          setSnackOpen(true);
+        })
+        .catch(function (error) {
+          console.log(error.response);
+          setSubmitMsg({
+            is_error: true,
+            message: error.response.data.message,
+          });
+          setSubmitState(false);
+          setSnackOpen(true);
+        });
+    }
+  }, [submitState]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -167,7 +190,7 @@ export default function NewMeal() {
         <Typography variant="h2" className={classes.root}>
           Create a New Meal
         </Typography>
-        <Typography variant="subtitle1" className={classes.currentStep}>
+        <Typography variant="h5" className={classes.currentStep}>
           Step {currentStep}
         </Typography>
         <form onSubmit={handleSubmit} className={classes.form}>
@@ -181,9 +204,11 @@ export default function NewMeal() {
                 state={state}
                 onAdd={handleAdd}
                 onQuantityChange={handleQuantityChange}
+                statsHTML={statsHTML}
+                setStatsHTML={setStatsHTML}
               />
             )}
-            {currentStep === 3 && <Page3 state={state} />}
+            {currentStep === 3 && <Page3 state={state} statsHTML={statsHTML} />}
             {currentStep === 4 && (
               <Page4
                 state={state}
@@ -220,18 +245,29 @@ export default function NewMeal() {
                 <Button variant="outlined" onClick={_back}>
                   Back
                 </Button>
-                <Button color="primary" onClick={handleSubmit}>
-                  Submit
-                </Button>
+
+                {submitState ? (
+                  <CircularProgress />
+                ) : (
+                  <Button color="primary" onClick={() => setSubmitState(true)}>
+                    Submit
+                  </Button>
+                )}
               </>
             )}
 
-            {submitMsg && (
-              <>
-                <br />
-                <Typography variant="button">{submitMsg}</Typography>
-              </>
-            )}
+            <Snackbar
+              open={snackOpen}
+              autoHideDuration={6000}
+              onClose={handleClose}
+            >
+              <Alert
+                onClose={handleClose}
+                severity={submitMsg.is_error ? "error" : "success"}
+              >
+                {submitMsg.message}
+              </Alert>
+            </Snackbar>
           </div>
         </form>
       </Container>
