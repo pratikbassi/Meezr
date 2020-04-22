@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Container } from "@material-ui/core";
+import { Container, LinearProgress } from "@material-ui/core";
 import axios from "axios";
 
 import Meal from "../Meal";
@@ -104,7 +104,7 @@ export default function Browse(props) {
     <>
       <div className={classes.browse}>
         <Filter />
-        <Container>{meals}</Container>
+        <Container>{meals.length === 0 ? <LinearProgress /> : meals}</Container>
       </div>
     </>
   );
