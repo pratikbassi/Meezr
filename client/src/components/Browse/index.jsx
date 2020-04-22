@@ -5,6 +5,7 @@ import axios from "axios";
 
 import Meal from "../Meal";
 import Filter from "./Filter";
+import Cookies from "js-cookie"
 
 const useStyles = makeStyles({
   browse: {
@@ -18,6 +19,7 @@ export default function Browse(props) {
   const [state, setState] = useState([]);
   const { history, location, match } = props.props;
   console.log("props", props);
+  const [userData, setUserData] = useState([])
 
   // reloads data from the database, and then setState
   function getData() {
@@ -29,11 +31,38 @@ export default function Browse(props) {
       return setState(res.data);
     });
   }
+
+  function getFavorites() {
+    if(Cookies.get("user_id")){
+      return Promise.resolve(
+        axios.get(
+          `/api/favorites/index/${Cookies.get("user_id")}`
+        )
+      ).then((res) => {
+        let returnArray = []
+        for (let item of res.data.favorites){
+          if (!returnArray.includes(item.meal_id)){
+            returnArray.push(item.meal_id)
+          }
+        }
+        console.log(returnArray)
+        setUserData(returnArray);
+      });
+    }
+
+
+  }
+
+
+
+
+
   // console.log("index state", state);
 
   useEffect(() => {
     // console.log("index GetData", state);
     getData();
+    getFavorites();
   }, [match.params]);
 
   const meals = state.map((meal) => {
@@ -48,6 +77,12 @@ export default function Browse(props) {
       meal_categories,
       user,
     } = meal;
+    let item_fav_status = false
+    console.log()
+    if(userData.includes(id)){
+
+      item_fav_status = true
+    }
     const mealProps = {
       id: id,
       image: meal_photos,
@@ -60,7 +95,7 @@ export default function Browse(props) {
       score: 0,
       prepTime: 0,
       cost: 0,
-      is_favorited: false,
+      is_favorited: item_fav_status,
     };
     return <Meal key={id} props={mealProps} />;
   });

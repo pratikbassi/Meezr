@@ -26,6 +26,8 @@ import { ThemeProvider } from "@material-ui/core/styles";
 import theme from "theme";
 import copy from "clipboard-copy";
 import Details from "./Details";
+import axios from "axios"
+import Cookies from "js-cookie"
 
 const useStyles = makeStyles(() => ({
   meal: {
@@ -107,18 +109,58 @@ export default function Meal(props) {
     is_extended,
   } = state;
 
+  const [isFav, setIsFav] = useState(state.is_favorited || false)
+  const [isAuth, setIsAuth] = useState(Cookies.get('user_id') || false)
+  console.log(is_favorited)
+
   useEffect(() => {
     setState(props.props);
   }, [props.props]);
+  useEffect(()=> {},
+  [isFav])
+
 
   const [expanded, setExpanded] = useState(is_extended || false);
 
   const favItem = () => {
-    // const newFavState = is_favorited
-    setState((prev) => {
-      return { ...prev, is_favorited: is_favorited ? false : true };
-    });
+    setIsFav(true)
+    if(Cookies.get("user_id")){
+      return Promise.resolve(axios({
+        method: "post",
+        url: "/api/favorites",
+        data: {
+          user_id: Cookies.get("user_id"),
+          meal_id: state.id
+        }
+      }).catch(err => {console.log(err)}))
+    }
+    
   };
+
+  const unFavItem = () => {
+    setIsFav(false)
+    if(Cookies.get("user_id")){
+      return Promise.resolve(axios({
+        method: "post",
+        url: "/api/favorites/delete",
+        data: {
+          user_id: Cookies.get("user_id"),
+          meal_id: state.id
+        }
+      }).catch(err => {console.log(err)}))
+    }
+  }
+
+  const checkFav = () => {
+    if (!isFav) {
+      favItem()
+
+    } else {
+      unFavItem()
+
+    }
+
+  }
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -186,9 +228,9 @@ export default function Meal(props) {
           <IconButton
             aria-label="favorite"
             className={classes.favorite}
-            onClick={() => favItem()}
+            onClick={checkFav}
           >
-            {is_favorited ? <Favorite /> : <FavoriteBorder />}
+            {isFav && Cookies.get("user_id") ? <Favorite /> : <FavoriteBorder />}
           </IconButton>
           <ClickAwayListener onClickAway={handleTooltipClose}>
             <Tooltip

@@ -5,18 +5,17 @@ class Api::FavoritesController < ApplicationController
 
   def index
     # puts session[]
-    render json: Favorite.includes([:user, :meal]).limit(1000), include: [:meal, :user => {:only => :user_name}]
+    render json: {favorites: Favorite.select("meal_id").where(user_id: params[:user_id])}
   end
-
+  
   def show
     render json: Favorite.includes([:user, :meal])
     .find(params[:id]), include: [:user => {:only => :user_name} ]
   end
 
   def create
-    user = session[:user_id]
     # pp user
-    Favorite.create(meal_id: params[:id], user_id: user)
+    Favorite.create(meal_id: params[:meal_id], user_id: params[:user_id])
   
     render :json => { message: 'Favorite has been added'}
     # else0
@@ -30,7 +29,11 @@ class Api::FavoritesController < ApplicationController
   def destroy
     # Favorite.where(favorited_id: @meal.id, user_id: current_user.id).first.destroy
     # redirect_to @meal, notice: 'Project is no longer in favorites'
-    Favorite.find(params[:id]).destroy
+    favorites = Favorite.find_by_sql("select * from favorites where user_id = #{params[:user_id]} and meal_id = #{params[:meal_id]}")
+    for item in favorites do
+      Favorite.destroy(item['id'])
+    end
+
     render :json => { message: "Deleted Entry" }
   end
 

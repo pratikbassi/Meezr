@@ -18,6 +18,8 @@ Rails.application.routes.draw do
     get '/logout'  ,to: 'sessions#destroy'
     
     resources :favorites
+    post "favorites/delete", to: "favorites#destroy"
+    get "favorites/index/:user_id" => "favorites#index"
     get "search/:query" =>  "meals#search"
     resources :dogs
     resources :users
