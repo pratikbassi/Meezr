@@ -78,7 +78,6 @@ export default function Browse(props) {
       user,
     } = meal;
     let item_fav_status = false
-    console.log()
     if(userData.includes(id)){
 
       item_fav_status = true

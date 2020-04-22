@@ -5,6 +5,7 @@ import {} from "@material-ui/icons";
 import axios from "axios";
 
 import Meal from "./Meal";
+import Cookies from "js-cookie"
 const useStyles = makeStyles({});
 
 export default function SingleMeal(props) {
@@ -22,12 +23,38 @@ export default function SingleMeal(props) {
     );
   }
   // console.log("index state", state);
+  const [userData, setUserData] = useState([])
 
+  function getFavorites() {
+    if(Cookies.get("user_id")){
+      return Promise.resolve(
+        axios.get(
+          `/api/favorites/index/${Cookies.get("user_id")}`
+        )
+      ).then((res) => {
+        let returnArray = []
+        for (let item of res.data.favorites){
+          if (!returnArray.includes(item.meal_id)){
+            returnArray.push(item.meal_id)
+          }
+        }
+        console.log(returnArray)
+        setUserData(returnArray);
+      });
+    }
+
+
+  }
   useEffect(() => {
     // console.log("index GetData", state);
 
     getData();
+    getFavorites();
   }, []);
+
+
+
+
 
   const meals = state.map((meal) => {
     const {
@@ -41,6 +68,11 @@ export default function SingleMeal(props) {
       meal_categories,
       user,
     } = meal;
+    let item_fav_status = false
+    if(userData.includes(id)){
+
+      item_fav_status = true
+    }
     const props = {
       id: id,
       image: meal_photos,
@@ -53,7 +85,7 @@ export default function SingleMeal(props) {
       score: 0,
       prepTime: 0,
       cost: 0,
-      is_favorited: false,
+      is_favorited: item_fav_status,
       is_extended: true,
     };
     return <Meal key={id} props={props} />;

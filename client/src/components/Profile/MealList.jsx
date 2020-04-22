@@ -22,6 +22,8 @@ export default function MealList(props) {
   const classes = useStyles();
   const strings = ["Aren't you hungry?", "Add some meals!", "Meez'r is based on 'Mise en place'!", "It's a good day to make a meal!", "Time to break out the cookbook!"]
 
+  let items = []
+
   function MakeList() {
     return(
       <Grid
@@ -32,9 +34,14 @@ export default function MealList(props) {
         spacing={2}
       >
         {props.info.map((item) => {
-          return (<Grid item > 
-            <MealListItem key={item.id } image_url={item.image_url} title={item.title} id={item.id} category={item.category}/>
-          </Grid>)
+          if (!items.includes(item.id)) {
+            items.push(item.id)
+            return (
+              <Grid item > 
+                <MealListItem key={item.id } image_url={item.image_url} title={item.title} id={item.id} category={item.category}/>
+              </Grid>)
+          }
+
         })}
       </Grid>
     )

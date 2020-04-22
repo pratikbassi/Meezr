@@ -10,15 +10,15 @@ import InputBase from "@material-ui/core/InputBase";
 import Button from "@material-ui/core/Button";
 import Link from "@material-ui/core/Link";
 import { Link as RouterLink } from "react-router-dom";
-
+import AccountCircle from "@material-ui/icons/AccountCircle"
 import Menu from "@material-ui/core/Menu";
-import AccountCircle from "@material-ui/icons/AccountCircle";
 
 import RenderAuth from "../Navbar/RenderAuth";
 import { ThemeProvider } from "@material-ui/core/styles";
 import theme from "theme";
 import SearchBox from "../Navbar/search";
 import Cookies from "js-cookie";
+import { Dialog } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   authStyle: {
@@ -94,17 +94,7 @@ export default function Navbar(props) {
   const [popup, setPopup] = React.useState(props.popup || false);
   const [button, setButton] = React.useState(null);
   const [state, setState] = React.useState(null)
-
-  const handleClickOpen = (buttonType) => {
-    setButton(buttonType);
-    setPopup(true);
-  };
-
-  const handleClose = () => {
-    setPopup(false);
-    setButton(null);
-  };
-
+  const myRef = React.createRef();
 
   const getMealsForUser = (user) => {
     return Promise.resolve(axios({
@@ -114,6 +104,28 @@ export default function Navbar(props) {
       setState(res.data);})
     )
   }
+
+  const handleClickOpen = (buttonType) => {
+
+    if(Cookies.get("user_id")){
+      getMealsForUser(Cookies.get("user_id"))
+      .then(()=>{
+        setButton(buttonType)
+        setPopup(true)
+      }).catch(err => {console.log(err); })
+    } else {
+      setButton(buttonType)
+      setPopup(true)
+    }
+  };
+
+  const handleClose = () => {
+    setPopup(false);
+    setButton(null);
+  };
+
+
+
 
 
   const logout = () => {
@@ -147,7 +159,6 @@ export default function Navbar(props) {
             handleClose();
             setCookie(res.data["user_id"]);
             setAuth(Cookies.get("user_id"));
-            getMealsForUser(Cookies.get("user_id"))
           })
           .catch((err) => {
             console.log(err);
@@ -172,7 +183,6 @@ export default function Navbar(props) {
             handleClose();
             setCookie(res.data["user_id"]);
             setAuth(Cookies.get("user_id"));
-            getMealsForUser(Cookies.get("user_id"))
           })
           .catch((err) => {
             console.log(err);
@@ -181,19 +191,12 @@ export default function Navbar(props) {
     }
   };
 
-  React.useEffect(() => {
-    if(Cookies.get("user_id")){
-      getMealsForUser(Cookies.get("user_id"))
-    }
-  }, 
-  []
-  )
-
 
   const CheckAuth = () => {
     if (auth) {
       return (
         <div>
+          
           <IconButton
             edge="end"
             aria-label="account of current user"
@@ -214,7 +217,7 @@ export default function Navbar(props) {
             registerUser={registerUser}
             loginUser={loginUser}
             profileData={state}
-
+            ref={myRef}
           />
         </div>
       );

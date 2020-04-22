@@ -48,6 +48,7 @@ export default function RenderAuth(props) {
   }
   if (props.buttonType === "profile") {
     return (
+      
       <ThemeProvider theme={theme}>
         <Dialog
           onClose={handleClose}

@@ -109,8 +109,8 @@ export default function Meal(props) {
     is_extended,
   } = state;
 
+
   const [isFav, setIsFav] = useState(state.is_favorited || false)
-  const [isAuth, setIsAuth] = useState(Cookies.get('user_id') || false)
   console.log(is_favorited)
 
   useEffect(() => {
@@ -154,12 +154,9 @@ export default function Meal(props) {
   const checkFav = () => {
     if (!isFav) {
       favItem()
-
     } else {
       unFavItem()
-
     }
-
   }
 
   const handleExpandClick = () => {
