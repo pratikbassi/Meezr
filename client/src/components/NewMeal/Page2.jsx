@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { TextField, CircularProgress } from "@material-ui/core";
+import { TextField, CircularProgress, Typography } from "@material-ui/core";
 import { Autocomplete } from "@material-ui/lab";
 
 import { useDebounce } from "use-debounce";
@@ -95,45 +95,48 @@ export default function Page2(props) {
 
   return (
     <section className={classes.page2}>
-      <Autocomplete
-        className={classes.search}
-        onChange={(event, value) => {
-          if (value) {
-            return onAdd(value);
-          }
-        }}
-        id="asynchronous-demo"
-        open={open}
-        onOpen={() => {
-          setOpen(true);
-        }}
-        onClose={() => {
-          setOpen(false);
-        }}
-        getOptionSelected={(option, value) => option.name === value.name}
-        getOptionLabel={(option) => option.name}
-        options={options}
-        loading={loading}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            label="Select Ingredient"
-            variant="outlined"
-            onChange={(event) => setSearchValue(event.target.value)}
-            InputProps={{
-              ...params.InputProps,
-              endAdornment: (
-                <React.Fragment>
-                  {loading ? (
-                    <CircularProgress color="inherit" size={20} />
-                  ) : null}
-                  {params.InputProps.endAdornment}
-                </React.Fragment>
-              ),
-            }}
-          />
-        )}
-      />
+      <div className={classes.search}>
+        <Typography variant="h5">Add your ingredients</Typography>
+        <Autocomplete
+          onChange={(event, value) => {
+            if (value) {
+              return onAdd(value);
+            }
+          }}
+          id="asynchronous-demo"
+          open={open}
+          onOpen={() => {
+            setOpen(true);
+          }}
+          onClose={() => {
+            setOpen(false);
+          }}
+          getOptionSelected={(option, value) => option.name === value.name}
+          getOptionLabel={(option) => option.name}
+          options={options}
+          loading={loading}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label="Select Ingredient"
+              variant="outlined"
+              onChange={(event) => setSearchValue(event.target.value)}
+              InputProps={{
+                ...params.InputProps,
+                endAdornment: (
+                  <React.Fragment>
+                    {loading ? (
+                      <CircularProgress color="inherit" size={20} />
+                    ) : null}
+                    {params.InputProps.endAdornment}
+                  </React.Fragment>
+                ),
+              }}
+            />
+          )}
+        />
+      </div>
+
       <div className={classes.list}>{createAddedIngredients(state)}</div>
       {/* <div className={classes.summary}> {renderStats(statsHTML)}</div> */}
       <div className={classes.summary}>

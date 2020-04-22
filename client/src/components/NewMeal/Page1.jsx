@@ -6,6 +6,7 @@ import {
   Select,
   MenuItem,
   TextField,
+  Typography,
 } from "@material-ui/core";
 import {} from "@material-ui/icons";
 
@@ -13,7 +14,6 @@ const useStyles = makeStyles({
   page1: {
     display: "flex",
     flexDirection: "column",
-    marginTop: "2em",
   },
   textFields: {
     width: "15em",
@@ -28,6 +28,7 @@ export default function Page2(props) {
 
   return (
     <section className={classes.page1}>
+      <Typography variant="h5">Pick your meal</Typography>
       <FormControl className={classes.textFields}>
         <InputLabel id="new-meal-type">Meal Type</InputLabel>
         <Select

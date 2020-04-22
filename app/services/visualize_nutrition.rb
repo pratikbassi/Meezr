@@ -46,5 +46,5 @@ class VisualizeNutrition
   end
 end
 
-ingredient_images = IngredientWidget.new('1082038')
-ingredient_images.get_nutrition_widget
+# ingredient_images = IngredientWidget.new('1082038')
+# ingredient_images.get_nutrition_widget

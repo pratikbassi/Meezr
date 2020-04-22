@@ -47,28 +47,18 @@ export default function Page3(props) {
 
   return (
     <section className={classes.page3}>
-      <Typography className={classes.summary} variant="h4">
-        Summary
-      </Typography>
+      <Typography variant="h5">Summary</Typography>
       <article className={classes.details}>
-        <Typography variant="h5">Meal Details</Typography>
-        <p>
-          Type: {type}
-          <br />
-          Size: {size}
-        </p>
-        <Typography variant="h5">Calorie Goal</Typography>
-        <p>
-          Actual Calories: {"some calculated value"}
-          <br />
-          Calorie Goal: {calorieGoal}
-        </p>
+        <Typography variant="subtitle1">
+          Meal Details for: {size} {type}
+        </Typography>
+        <Typography variant="subtitle2">Calorie Goal: {calorieGoal}</Typography>
+        <div className={classes.stats}>
+          <RenderStats statsHTML={statsHTML} />
+        </div>
         <Typography variant="h5">Ingredients</Typography>
         {renderIngredients()}
       </article>
-      <div className={classes.stats}>
-        <RenderStats statsHTML={statsHTML} />
-      </div>
     </section>
   );
 }

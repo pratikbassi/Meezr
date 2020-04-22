@@ -20,6 +20,7 @@ const useStyles = makeStyles({
     gridTemplateColumns: "auto auto",
     gridTemplateRows: "auto auto",
     gridTemplateAreas: '"textInput privacy" "preview preview"',
+    gridGap: "1em",
   },
   textInput: {
     gridArea: "textInput",
@@ -47,17 +48,6 @@ export default function Page4(props) {
   const { is_public, ingredients, image_url, description, title } = state;
 
   const renderMealPreview = () => {
-    // const ingredientsArr = [];
-    // for (const ingredient in ingredients) {
-    //   if (ingredients.hasOwnProperty(ingredient)) {
-    //     if (ingredients[ingredient] > 0) {
-    //       ingredientsArr.push({
-    //         product: ingredient,
-    //         servings: ingredients[ingredient],
-    //       });
-    //     }
-    //   }
-    // }
     const ingredients = Object.values(state.ingredients);
     const ingredientsArr = ingredients.map((ingredient) => ({
       meal_id: 0,
@@ -93,7 +83,7 @@ export default function Page4(props) {
       is_favorited: false,
     };
 
-    return <Meal props={newProps} />;
+    return <Meal key={newProps.id} props={newProps} />;
   };
 
   const [newImage, setNewImage] = useState("");
@@ -121,8 +111,8 @@ export default function Page4(props) {
 
   return (
     <section className={classes.page4}>
-      <Typography variant="h4">Publish your meal</Typography>
       <div className={classes.textInput}>
+        <Typography variant="h5">Publish your meal</Typography>
         <TextField
           className={classes.textField}
           name="title"
