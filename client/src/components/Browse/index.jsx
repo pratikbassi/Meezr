@@ -4,13 +4,12 @@ import { Container, LinearProgress } from "@material-ui/core";
 import axios from "axios";
 
 import Meal from "../Meal";
-import Filter from "./Filter";
 import Cookies from "js-cookie"
 
 const useStyles = makeStyles({
   browse: {
     display: "grid",
-    "grid-template-columns": "1fr 3fr 1fr",
+    "grid-template-columns": " 5fr 5fr ",
   },
 });
 
@@ -99,11 +98,15 @@ export default function Browse(props) {
     return <Meal key={id} props={mealProps} />;
   });
 
+  const mealsLen = Math.floor(meals.length / 2)
+  let mealsListOne = meals.slice(0, mealsLen)
+  let mealsListTwo = meals.slice(mealsLen, meals.length)
+
   return (
     <>
       <div className={classes.browse}>
-        <Filter />
-        <Container>{meals.length === 0 ? <LinearProgress /> : meals}</Container>
+      <Container>{meals.length === 0 ? <LinearProgress /> : mealsListTwo}</Container>
+      <Container>{meals.length === 0 ? <LinearProgress /> : mealsListOne}</Container>
       </div>
     </>
   );
