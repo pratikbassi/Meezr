@@ -7,9 +7,5 @@ If you are interested in using this website, please fork it then clone it - you 
 
 run bin/rails s to start the server and npm start to start the client inside the client file!
 
-### Some screenshots are below!
-![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Front Page")
-![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Front Page expanded")
-![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Login Screen")
-![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Meal Page")
-![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Nutrition Chart")
+### Some screenshots are in the resources folder!
+https://github.com/pratikbassi/Meezr/tree/master/resources
