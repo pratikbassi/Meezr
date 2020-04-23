@@ -5,6 +5,8 @@ The project was built with Javascript, React, Ruby on Rails, PostgresSQL, Elepha
 
 If you are interested in using this website, please fork it then clone it - you will then need to sign up for ElephantSQL and create your own .env file with your secret URL.
 
+run bin/rails s to start the server and npm start to start the client inside the client file!
+
 ### Some screenshots are below!
 ![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Front Page")
 ![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Front Page expanded")
